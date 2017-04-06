@@ -243,11 +243,11 @@ var freshIndex = {
             stitching += '<span class="money">￥<i class="money_i">' + v.discount_price + '</i>/<i>' + v.unit + '</i></span>';
             stitching += '<span class="operate">';
             stitching += '<a class="reduce" href="javascript:;">';
-            stitching += '<img src="../img/reduce.png">';
+            stitching += '<img src="img/reduce.png">';
             stitching += '</a>';
             stitching += '<span class="num">' + v.goods_num + '</span>';
             stitching += '<a class="plus" href="javascript:;">';
-            stitching += '<img src="../img/plus.png">';
+            stitching += '<img src="img/plus.png">';
             stitching += '</a>';
             stitching += '</span>';
             stitching += '</li>';
@@ -277,11 +277,11 @@ var freshIndex = {
                         stitching += '<span class="money">￥<i class="money_i">' + v.discount_price + '</i>/<i>' + v.unit + '</i></span>';
                         stitching += '<span class="operate">';
                         stitching += '<a class="reduce" href="javascript:;">';
-                        stitching += '<img src="../img/reduce.png">';
+                        stitching += '<img src="img/reduce.png">';
                         stitching += '</a>';
                         stitching += '<span class="num">' + v.goods_num + '</span>';
                         stitching += '<a class="plus" href="javascript:;">';
-                        stitching += '<img src="../img/plus.png">';
+                        stitching += '<img src="img/plus.png">';
                         stitching += '</a>';
                         stitching += '</span>';
                         stitching += '</li>';
@@ -489,7 +489,7 @@ var freshIndex = {
             sessionStorage.setItem('time', now);
             $('#wrap').hide();
             $('#gec_detail').hide();
-            window.location.href = path + 'order.html';
+            window.location.href = path + 'order.php';
         })
     },
     /**
@@ -549,12 +549,12 @@ var freshIndex = {
                     todayContent += '<div class="right_add">';
                     if (v.goods_num > 0) {
                         todayContent += '<a class="reduce fl" href="javascript:;">';
-                        todayContent += '<img src="../img/reduce.png">';
+                        todayContent += '<img src="img/reduce.png">';
                         todayContent += '</a>';
                         todayContent += '<span class="num fl">' + v.goods_num + '</span>';
                     }
                     todayContent += '<a class="plus fr" href="javascript:;">';
-                    todayContent += '<img src="../img/plus.png">';
+                    todayContent += '<img src="img/plus.png">';
                     todayContent += '</a></div></li></ul></div>';
                     $detailWrap.append(todayContent);
                 });
@@ -606,12 +606,12 @@ var freshIndex = {
                         goodsContent += '<div class="right_add">';
                         if (v.goods_num > 0) {
                             goodsContent += '<a class="reduce fl" href="javascript:;" cate_id="' + cate_id + '">';
-                            goodsContent += '<img src="../img/reduce.png">';
+                            goodsContent += '<img src="img/reduce.png">';
                             goodsContent += '</a>';
                             goodsContent += '<span class="num fl">' + v.goods_num + '</span>';
                         }
                         goodsContent += '<a class="plus fr" href="javascript:;" cate_id="' + cate_id + '">';
-                        goodsContent += '<img src="../img/plus.png">';
+                        goodsContent += '<img src="img/plus.png">';
                         goodsContent += '</a></div></li>';
                     });
                     goodsContent += '</ul></div>';

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minmum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title></title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="lib/layui/css/modules/layer/default/layer.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+
+<!--<div class="container">-->
+<div class="row workWrap">
+    <!--<div class="h35"></div>-->
+    <nav class="navbar navbar-fixed-top">
+        <div class="container title">
+            <span class="index">良品菜市</span>
+        </div>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div id="today_recommend" class="swiper-slide swiper_active">今日推荐</div>
+                <!--<div class="swiper-slide">放心肉类</div>-->
+                <!--<div class="swiper-slide">时令蔬菜</div>-->
+                <!--<div class="swiper-slide">江湖海鲜</div>-->
+                <!--<div class="swiper-slide">冷冻冰鲜</div>-->
+                <!--<div class="swiper-slide">缤纷水果</div>-->
+            </div>
+        </div>
+        <div class="h35"></div>
+    </nav>
+
+    <div class="col-xs-3 col-sm-3 left_slide">
+        <ul>
+            <li class="active"><a href="javascript:;">今日推荐</a></li>
+            <!--<li><a href="javascript:;" tab="b">苏太牛肉</a></li>-->
+            <!--<li><a href="javascript:;" tab="c">本地肥牛</a></li>-->
+            <!--<li><a href="javascript:;" tab="d">安徽黄牛</a></li>-->
+            <!--<li><a href="javascript:;" tab="e">啦啦啦啦啦</a></li>-->
+            <!--<li><a href="javascript:;" tab="f">呜呜呜呜</a></li>-->
+            <!--<li><a href="javascript:;" tab="g">哈哈哈哈</a></li>-->
+        </ul>
+    </div>
+    <div class="col-xs-9 col-sm-9 right_content">
+        <div class="detail_describe">苏太牛肉（4）</div>
+        <!--<ul>-->
+        <div id="detail_wrap" class="detail_wrap">
+            <!--<div class="content_li">-->
+                <!--<ul>-->
+                    <!--<li data-id="1">-->
+                        <!--<div class="left_img">-->
+                            <!--&lt;!&ndash;<div class="img_wrap">&ndash;&gt;-->
+                            <!--<img src="img/img.png">-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--</div>-->
+                        <!--<div class="left_describe">-->
+                            <!--<header>特惠供应</header>-->
+                            <!--<p>月销49笔</p>-->
+                            <!--<strong>￥<i>17</i>/<b>个</b></strong>-->
+                        <!--</div>-->
+                        <!--<div class="right_add">-->
+                            <!--<a class="reduce fl" href="javascript:;">-->
+                                <!--<img src="img/reduce.png">-->
+                            <!--</a>-->
+                            <!--<span class="num fl">0</span>-->
+                            <!--<a class="plus fr" href="javascript:;">-->
+                                <!--<img src="img/plus.png">-->
+                            <!--</a>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <div id="wrap" class="wrap"></div>
+    <nav id="navbar" class="navbar navbar-fixed-bottom">
+
+        <div id="gec_detail" class="container gec_detail">
+            <div class="gwcDetail_top">
+                <div class="top_left">
+                    <i></i>
+                    <span>购物车</span>
+                </div>
+                <div class="top_right">
+                    <i></i>
+                    <span>清空</span>
+                </div>
+            </div>
+            <div id="abc" class="gwcDetail_content">
+                <ul>
+                    <!--<li>-->
+                    <!--<span class="name">苏太放心猪肉</span>-->
+                    <!--<span class="money">￥<i class="money_i">13.00</i>/<i>斤</i></span>-->
+                    <!--<span class="operate">-->
+                    <!--<a class="reduce" href="javascript:;">-->
+                    <!--<img src="img/reduce.png">-->
+                    <!--</a>-->
+                    <!--<span class="num">2</span>-->
+                    <!--<a class="plus" href="javascript:;">-->
+                    <!--<img src="img/plus.png">-->
+                    <!--</a>-->
+                    <!--</span>-->
+                    <!--</li>-->
+                </ul>
+            </div>
+            <p class="psf">*配送费会根据您所在位置智能计算</p>
+        </div>
+        <div class="container gwc_bottom">
+            <div id="gwc" class="gwc">
+                <div id="target" class="gwc_img">
+                    <i></i>
+                    <div class="icon">0</div>
+                </div>
+                <span><em>￥</em><b>购物车是空的</b></span>
+            </div>
+            <div class="gwc_submit">
+                <a href="javascript:;">还差￥<i>30</i>元起送</a>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+</body>
+</html>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="lib/layui/lay/modules/layer.js" ></script>
+<script src="js/scrollfix.js"></script>
+<script src="js/jquery.fly.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/swiper-3.4.2.min.js"></script>
+<script src="js/index.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var ScrollFix = function (elem) {
+        var startY, startTopScroll;
+        elem.addEventListener('touchstart', function (event) {
+            startY = event.touches[0].pageY;
+            startTopScroll = elem.scrollTop;
+            //当滚动条在最顶部的时候
+            if (startTopScroll <= 0)
+                elem.scrollTop = 1;
+            //当滚动条在最底部的时候
+            if (startTopScroll + elem.offsetHeight >= elem.scrollHeight)
+                elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
+        }, false);
+    };
+</script>

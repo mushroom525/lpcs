@@ -1210,3 +1210,7 @@ a:visited, a:hover, a:focus {
     width: 100%;
     text-align: center;
 }
+
+#goto_pay {
+    z-index: 1200;
+}
