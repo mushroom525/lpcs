@@ -225,10 +225,10 @@ var freshIndex = {
                 height: 0
             },
             onEnd: function () {
-                var gwc_num = $('.icon').text();
-                gwc_num++;
-                $('.icon').text(gwc_num);
-                this.destory();
+                // var gwc_num = $('.icon').text();
+                // gwc_num++;
+                // $('.icon').text(gwc_num);
+                // this.destory();
             }
         });
     },
@@ -489,7 +489,7 @@ var freshIndex = {
             sessionStorage.setItem('time', now);
             $('#wrap').hide();
             $('#gec_detail').hide();
-            window.location.href = path + 'order.php';
+            window.location.href = path + 'order.html';
         })
     },
     /**
@@ -652,6 +652,8 @@ $(function () {
                 // sessionStorage.setItem('openid', 'weww1');
                 // freshIndex.getTodayRecommend();
                 freshIndex.init();
+            } else {
+                alert(data.msg);
             }
         },
         error: function (data) {

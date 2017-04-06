@@ -22,16 +22,16 @@ var addressEv = {
         self.addressEvent();
         self.mapJump();
         self.addressInfo();
-        window.onload = function () {
-            sessionStorage.removeItem("addressInfoObj");
-        }
+        // window.onload = function () {
+        //     sessionStorage.removeItem("addressInfoObj");
+        // }
     },
     /**
      * 返回上一页
      */
     goBackEvent: function () {
         $('.go_back').click(function () {
-            window.history.back();
+            window.location.href = path + 'address.html';
         })
     },
     /**
@@ -94,8 +94,9 @@ var addressEv = {
             }
         }
         var obj = sessionStorage.addressInfoObj;
+        // sessionStorage.removeItem("addressInfoObj");
         if (obj != null && obj != undefined && obj != "") {
-            var valObj = JSON.parse(sessionStorage.addressInfoObj);
+            var valObj = JSON.parse(obj);
             if (valObj.poiname != null && valObj.poiname != "") {
                 if (valObj.poiname == '我的位置') {
                     $('.Jtxmap').html(valObj.poiaddress);
@@ -147,8 +148,9 @@ var addressEv = {
                     $('.enter_name').val(data.data.name);
                     $('.contact_tel').val(data.data.phone);
                     var obj = sessionStorage.addressInfoObj;
+                    sessionStorage.removeItem("addressInfoObj");
                     if (obj != null && obj != undefined && obj != "") {
-                        var valObj = JSON.parse(sessionStorage.addressInfoObj);
+                        var valObj = JSON.parse(obj);
                         if (valObj.poiname != null && valObj.poiname != "") {
                             if (valObj.poiname == '我的位置') {
                                 $('.Jtxmap').html(valObj.poiaddress);
