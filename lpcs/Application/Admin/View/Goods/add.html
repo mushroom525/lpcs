@@ -1,0 +1,110 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7 charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title> ECMall </title>
+    <link href="__PUBLIC__/css/admin.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery1.9.0.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/mlselection.js"></script>
+    <style type="text/css">
+        <!--
+        body {background: #fcfdff}
+        -->
+    </style>
+    <script type="text/javascript">
+        //<!CDATA[
+        $(function(){
+            // multi-select mall_gcategory
+            $('#gcategory').length>0 && gcategoryInit("gcategory");
+        });
+        //]]>
+    </script>
+    </head>
+<body>
+<div id="rightTop">
+    <p>商品管理</p>
+    <ul class="subnav">
+        <li><a class="btn1" href="{:U('goods/index')}">管理</a></li>
+        <li>
+            <span>新增</span>
+        </li>
+    </ul>
+</div>
+<div class="info">
+    <form method="post" enctype="multipart/form-data" id="user_form" action="{:U('goods/add')}">
+        <table class="infoTable">
+            <tbody><tr>
+                <th class="paddingT15"> 商品名:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput2" id="user_name" type="text" name="goods_name" value="">
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">商品图片:</th>
+                <td class="paddingT15 wordSpacing5"><input class="infoTableFile2" type="file" name="file" id="portrait">
+                    <label class="field_notice">支持格式gif,jpg,jpeg,png</label>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">
+                    <label for="parent_id">商品分类:</label></th>
+                <td class="paddingT15 wordSpacing5" id="gcategory">
+                    <select name="cate_id[]" style="height:23px"><option value="0">请选择...</option>
+                        <notempty name="parents">
+                            <foreach name="parents" item="item">
+                                <option value="{$item.cate_id}">
+                                    {$item.cate_name}
+                                </option>
+                            </foreach>
+                        </notempty>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15">商品标签:</th>
+                <td class="paddingT15 wordSpacing5"><p>
+                    <label>
+                        <input type="radio" name="tag" value="0" checked="checked">
+                        无标签</label>
+                    <label>
+                        <input type="radio" name="tag" value="1" >
+                        【今日推荐】</label>
+                    <label>
+                        <input type="radio" name="tag" value="2">
+                        【特惠供应】</label>
+                </p></td>
+            </tr>
+
+            <tr>
+                <th class="paddingT15"> 单位:</th>
+                <td class="paddingT15 wordSpacing5"><input class="infoTableInput2" name="unit" type="text"  value="" style="width: 50px">        </td>
+            </tr>
+            <tr>
+                <th class="paddingT15"> 售价:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput2" name="price" type="text" id="price" value="0.00" style="width: 90px">
+                </td>
+            </tr>
+            <tr>
+                <th class="paddingT15"> 折扣价:</th>
+                <td class="paddingT15 wordSpacing5">
+                    <input class="infoTableInput2" name="discount_price" type="text" id="discount_price" value="0.00" style="width: 90px">
+                    <label class="field_notice">没有折扣价时填写售价</label>
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td class="ptb20"><input class="formbtn" type="submit" name="Submit" value="提交">
+                    <input class="formbtn" type="reset" name="Reset" value="重置" onclick="myrefresh()">
+                </td>
+            </tr>
+            </tbody></table>
+    </form>
+</div>
+<p id="page_footer">Copyright 2003-2012 ShopEx Inc.,All rights reserved.</p>
+<script>
+    function myrefresh()
+    {
+        window.location.reload();
+    }
+</script>
+</body></html>

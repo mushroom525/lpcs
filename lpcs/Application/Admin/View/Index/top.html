@@ -1,0 +1,23 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>厚生网后台管理</title>
+<link rel="stylesheet" href="__PUBLIC__/css/bootstrap.css" />
+<link rel="stylesheet" href="__PUBLIC__/css/css.css" />
+<script type="text/javascript" src="__PUBLIC__/js/jquery1.9.0.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="header">
+     <div class="logo"></div>
+     
+                <div class="header-right">
+                <i class="icon-user icon-white"></i> <a style="text-decoration:none;">您好 {$_SESSION['login']['type']==0?超级管理员:普通管理员}：{$_SESSION['login']['name']}</a> 
+                <i class="icon-off icon-white"></i> <a href="{:U('Login/logout')}" target="_parent">注销</a>
+                </div>
+</div>
+<!-- 顶部 -->     
+
+</body>
+</html>
