@@ -359,6 +359,7 @@ var freshIndex = {
         $(document).on('click', '.plus', function () {
             var goods_id = $(this).parents('li').attr('data-id');
             var cate_id = $(this).attr('cate_id');
+            freshIndex.gotoGwcEvent(event, $(this));
             $.ajax({
                 url: ADDCARTURL,
                 type: "GET",
@@ -485,7 +486,6 @@ var freshIndex = {
             var m = myDate.getMinutes();     //获取当前分钟数(0-59)
 
             var now = p(h) + ':' + p(m);
-            alert(now);
             sessionStorage.setItem('time', now);
             $('#wrap').hide();
             $('#gec_detail').hide();

@@ -177,10 +177,12 @@ var addressEv = {
 //			$("#J_scroll_holder ul").attr("data-time", JSON.stringify(timeObj));
             $("#wrap").removeClass("display");
             $("#Jcontainer").slideDown(300);
+            $('#time').css('z-index', '1201');
         });
         $(document).on("touchstart", "#wrap", function () {
             $("#Jcontainer").slideUp(300, function () {
                 $("#wrap").addClass("display");
+                $('#time').css('z-index', '1030');
             });
 
         });
@@ -197,6 +199,7 @@ var addressEv = {
 //			$(".Jsongda").find("span").text($(this).find("p").text());
             $("#Jcontainer").slideUp(300, function () {
                 $("#wrap").addClass("display");
+                $('#time').css('z-index', '1030');
             });
 
         });
@@ -244,7 +247,7 @@ var addressEv = {
         if (obj.time.indexOf("尽快送达") >= 0) {
             $(".Jsongda").find("span").text(obj.time);
         } else {
-            $(".Jsongda").find("span").text(obj.dayName + ' | ' + obj.time);
+            $(".Jsongda").find("span").text(obj.dayName + obj.time);
         }
     }
 
