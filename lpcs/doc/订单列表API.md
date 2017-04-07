@@ -38,7 +38,7 @@ data         {
                     order_time       下单时间
                     goods_num        购买数量
                     total_amount     消费金额
-                    
+                    is_suggest       是否提交过意见反馈            
              }
 msg          ""
 )

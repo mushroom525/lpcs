@@ -91,6 +91,7 @@ class OrderController extends Controller
         $callback=$_REQUEST['callback'];
         $user_openid=$_REQUEST['openid'];
         $order=D('order');
+        $suggest=D('suggestion');
         $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id and o.user_openid='%s'",$user_openid)->select();
         foreach($orderlist as $key=>$val){
             switch ($val['order_step']){
@@ -101,6 +102,15 @@ class OrderController extends Controller
                 case 4: $order_step_ch='已取消';break;
             }
             $orderlist[$key]['order_step_ch']=$order_step_ch;
+            $map['user_openid']=$user_openid;
+            $map['order_id']=$val['order_id'];
+            $issuggest=$suggest->where($map)->find();
+            if($issuggest){
+                $is=1;
+            }else{
+                $is=0;
+            }
+            $orderlist[$key]['is_suggest']=$is;
         }
         if($orderlist){
             $arr = array(
@@ -117,5 +127,12 @@ class OrderController extends Controller
             );
             echo $callback . "(" . HHJson($arr) . ")";
         }
+    }
+    public function orderinfo(){
+        $callback=$_REQUEST['callback'];
+        $user_openid=$_REQUEST['openid'];
+        $order_id=$_REQUEST['order_id'];
+        $order=D('order');
+        $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,a.area,a.address.a.room,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id and o.user_openid='%s'",$user_openid)->select();
     }
 }

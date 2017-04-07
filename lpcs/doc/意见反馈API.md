@@ -31,6 +31,7 @@ callback(
 code         000
 data         {
                     openid      微信用户id
+                    order_id    订单id
                     contetn     内容
              }
 msg          发表成功

@@ -15,6 +15,7 @@ class SuggestionController extends Controller
         $callback=$_REQUEST['callback'];
         $data['user_openid']=$_REQUEST['openid'];
         $data['content']=$_REQUEST['content'];
+        $data['order_id']=$_REQUEST['order_id'];
         $suggestion=D('suggestion');
         $sugadd=$suggestion->add($data);
         if($sugadd){
