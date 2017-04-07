@@ -19,7 +19,7 @@
 data
 openid              微信用户id  
 order_id            订单id
-contetn             内容
+content             内容
 
 callback            回调
 ```
