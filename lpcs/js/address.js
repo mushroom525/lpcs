@@ -1,9 +1,9 @@
 /**
  * Created by Administrator on 2017/3/30.
  */
-var BASEURL = 'http://www.heeyhome.com/';
-var ADDRESSLISTURL = BASEURL + 'lpcs/home/address/index'; // 地址列表
-var DEFAULTADDRESSURL = BASEURL + 'lpcs/home/address/setdefault'; // 设为默认地址
+var BASEURL = 'http://www.heeyhome.com/lpcs/home/';
+var ADDRESSLISTURL = BASEURL + 'address/index'; // 地址列表
+var DEFAULTADDRESSURL = BASEURL + 'address/setdefault'; // 设为默认地址
 
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
 
@@ -24,7 +24,7 @@ var addressEv = {
      */
     goBackEvent: function () {
         $('.go_back').click(function () {
-            window.history.back();
+            window.location.href = path + 'order.html';
         })
     },
     /**

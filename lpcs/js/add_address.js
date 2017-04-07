@@ -1,11 +1,11 @@
 /**
  * Created by Administrator on 2017/3/30.
  */
-var BASEURL = 'http://www.heeyhome.com/';
-var ADDADDRESSURL = BASEURL + 'lpcs/home/address/add'; // 新增地址
-var EDITADDRESSURL = BASEURL + 'lpcs/home/address/edit'; // 编辑地址
-var DELETEADDRESSURL = BASEURL + 'lpcs/home/address/del'; // 删除地址
-var ADDRESSINFOURL = BASEURL + 'lpcs/home/address/addressinfo'; // 获取编辑地址信息
+var BASEURL = 'http://www.heeyhome.com/lpcs/home/';
+var ADDADDRESSURL = BASEURL + 'address/add'; // 新增地址
+var EDITADDRESSURL = BASEURL + 'address/edit'; // 编辑地址
+var DELETEADDRESSURL = BASEURL + 'address/del'; // 删除地址
+var ADDRESSINFOURL = BASEURL + 'address/addressinfo'; // 获取编辑地址信息
 
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
 

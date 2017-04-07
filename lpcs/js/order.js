@@ -1,9 +1,10 @@
 /**
  * Created by Administrator on 2017/3/30.
  */
-var BASEURL = 'http://www.heeyhome.com/';
-var ADDRESSLISTURL = BASEURL + 'lpcs/home/address/index'; // 地址列表
-var GWCINFOURL = BASEURL + 'lpcs/home/cart/index'; // 获取默认购物车内容
+var BASEURL = 'http://www.heeyhome.com/lpcs/home/';
+var ADDRESSLISTURL = BASEURL + 'address/index'; // 地址列表
+var GWCINFOURL = BASEURL + 'cart/index'; // 获取默认购物车内容
+var CONFIRMPAYURL = BASEURL + 'order/orderproduce'; // 确认付款
 
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
 
@@ -19,6 +20,7 @@ var addressEv = {
         self.gwcContentInit();
         self.selectTimeEvent(); //选择送达时间
         self.clickSelectTimeEvent(); //选择送达时间
+        self.confirmPay(); //确认付款
     },
     /**
      * 数据初始化
@@ -60,15 +62,17 @@ var addressEv = {
         // getHourAndMinutesArr('08:15', '20:15', 15);
         //测试数据
 
+        function today() {
+            var arr = ['尽快送达 | 预计' + time];
+            var timeArr1 = time.split(':');
+            timeArr1[1] = timeArr1[1] - timeArr1[1] % 15 + 15;
+            var timeTempArr = getHourAndMinutesArr(timeArr1[0] + ':' + timeArr1[1], '20:15', 15);
+            arr = arr.concat(timeTempArr);
+            return arr;
+        }
+
         var timeObj = {
-            "今日": function () {
-                var arr = [time];
-                var timeArr = time.split(':');
-                timeArr[1] = timeArr[1] - timeArr[1] % 15 + 15;
-                var timeTempArr = getHourAndMinutesArr(timeArr[0] + ':' + timeArr[1], '20:15', 15);
-                arr.concat(timeTempArr);
-                return arr;
-            },
+            "今日": today(),
             "明日": getHourAndMinutesArr('08:15', '20:15', 15)
         };
         // console.log(timeObj);
@@ -83,7 +87,7 @@ var addressEv = {
      */
     goBackEvent: function () {
         $('.go_back').click(function () {
-            window.history.back();
+            window.location.href = 'http://www.heeyhome.com/lpcs/index.html';
         })
     },
     /**
@@ -120,6 +124,8 @@ var addressEv = {
                         stitching += '</li>';
                         $content.append(stitching);
                     });
+                    var amount = parseFloat(data.data.status.amount) + parseFloat($('#psf').html());
+                    $('.order_money span').html('￥' + amount);
                 }
             },
             error: function (data) {
@@ -214,7 +220,7 @@ var addressEv = {
 
         $(document).on("click", "#Jleft_slide ul li", function () {
             $(this).addClass("active").siblings("li").removeClass("active");
-            $("#J_scroll_holder ul ").html(self.spliceTimeInfoEvent($(this).data("time"), $(this).data("day")));
+            $("#J_scroll_holder ul ").html(self.spliceTimeInfoEvent(JSON.parse($(this).data("time")), $(this).data("day")));
             self.selectHiddenEvent($(this).data("time"), $(this).data("day"), 0)
         });
     },
@@ -225,7 +231,7 @@ var addressEv = {
     spliceDataInfoEvent: function (Obj) {
         var vrStr = '';
         $.each(Obj, function (i, v) {
-            vrStr += '<li class="' + (i == '今日' ? "active" : "") + '" data-day = ' + i + ' data-time = ' + JSON.stringify(Obj) + '>' + i + '</li>';
+            vrStr += '<li class="' + (i == '今日' ? "active" : "") + '" data-day = ' + i + " data-time = " + JSON.stringify(Obj) + ">" + i + '</li>';
 
         });
         return vrStr;
@@ -235,6 +241,7 @@ var addressEv = {
      * @param {Object} Obj 对象
      */
     spliceTimeInfoEvent: function (Obj, name) {
+
         var vrStr = '';
         $.each(Obj[name], function (i, v) {
             vrStr += '<li data-i="' + name + '" data-j=' + JSON.stringify(Obj) + '><p>' + v + '</p><i class="' + (i == 0 ? "click" : "") + '"></i></li>';
@@ -252,14 +259,102 @@ var addressEv = {
         $("#JselectIt").val(JSON.stringify(hiddenObj));
         var obj = JSON.parse($("#JselectIt").val());
         console.log(obj);
-        if (obj.time.indexOf("尽快送达") >= 0) {
-            $(".Jsongda").find("span").text(obj.time);
-        } else {
-            $(".Jsongda").find("span").text(obj.dayName + obj.time);
+        if (obj.time) {
+            if (obj.time.indexOf("尽快送达") >= 0) {
+                $(".Jsongda").find("span").text(obj.time);
+            } else {
+                $(".Jsongda").find("span").text(obj.dayName + obj.time);
+            }
         }
+    },
+
+    /**
+     * 确认付款
+     */
+    confirmPay: function () {
+        $('.order_pay a').click(function () {
+            if ($('.order_address').attr('data-id')) {
+                $.ajax({
+                    url: CONFIRMPAYURL,
+                    type: "GET",
+                    async: true,
+                    data: {
+                        openid: openid,
+                        address_id: $('.order_address').attr('data-id'),
+                        appointment_time: $('.Jsongda span').html(),
+                        distribution_cost: $('#psf').html(),
+                        remark: $('.order_mark textarea').val()
+                    },
+                    dataType: 'jsonp',
+                    success: function (data) {
+                        if (data.code == '000') {
+                            var parsedata = JSON.parse(data.data.jsApiParameters);
+                            callpay(parsedata);
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    },
+                    error: function (data) {
+                    }
+                });
+            } else {
+                layer.msg('请添加地址');
+            }
+
+        });
+
     }
 
 };
+
+/**
+ * 微信支付
+ */
+function callpay(jsStr) {
+    if (typeof WeixinJSBridge == "undefined") {
+        if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+        } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+            document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+        }
+    } else {
+        jsApiCall(jsStr);
+    }
+}
+
+
+//调用微信JS api 支付
+function jsApiCall(jsStr) {
+
+    WeixinJSBridge.invoke(
+        'getBrandWCPayRequest',
+        {
+            "appId": jsStr.appId,
+            "nonceStr": jsStr.nonceStr,
+            "package": jsStr.package,
+            "paySign": jsStr.paySign,
+            "signType": jsStr.signType,
+            "timeStamp": jsStr.timeStamp
+        },
+        function (res) {
+            WeixinJSBridge.log(res.err_msg);
+            if (res.err_msg == 'get_brand_wcpay_request:cancel') {
+                layer.msg("您已取消了此次支付");
+                return;
+            } else if (res.err_msg == 'get_brand_wcpay_request:fail') {
+                layer.msg("支付失败");
+                return;
+            } else if (res.err_msg == 'get_brand_wcpay_request:ok') {
+                alert("支付成功！");//跳转到订单页面
+
+            } else {
+                layer.msg("未知错误" + res.error_msg);
+                return;
+            }
+        }
+    );
+}
 
 $(function () {
     addressEv.init();

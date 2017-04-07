@@ -5,15 +5,15 @@
  * Created by Administrator on 2017/3/9.
  */
 
-var BASEURL = 'http://www.heeyhome.com/';
-var CATELISTURL = BASEURL + 'lpcs/home/category/catelist'; // 分类列表
-var TODAYREURL = BASEURL + 'lpcs/home/goodslist/todayrecommend'; // 今日推荐列表
-var GOODLISTURL = BASEURL + 'lpcs/home/goodslist/goodslist'; // 商品列表
-var OPENIDURL = BASEURL + 'lpcs/home/index/index'; // openid
-var GWCINFOURL = BASEURL + 'lpcs/home/cart/index'; // 获取默认购物车内容
-var ADDCARTURL = BASEURL + 'lpcs/home/cart/add'; // 加入购物车
-var DELCARTURL = BASEURL + 'lpcs/home/cart/del'; // 删除购物车
-var EMPTYCARTURL = BASEURL + 'lpcs/home/cart/emptycart'; // 清空购物车
+var BASEURL = 'http://www.heeyhome.com/lpcs/home/';
+var CATELISTURL = BASEURL + 'category/catelist'; // 分类列表
+var TODAYREURL = BASEURL + 'goodslist/todayrecommend'; // 今日推荐列表
+var GOODLISTURL = BASEURL + 'goodslist/goodslist'; // 商品列表
+var OPENIDURL = BASEURL + 'index/index'; // openid
+var GWCINFOURL = BASEURL + 'cart/index'; // 获取默认购物车内容
+var ADDCARTURL = BASEURL + 'cart/add'; // 加入购物车
+var DELCARTURL = BASEURL + 'cart/del'; // 删除购物车
+var EMPTYCARTURL = BASEURL + 'cart/emptycart'; // 清空购物车
 
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
 var openid = '';
@@ -116,36 +116,45 @@ var freshIndex = {
      * 点击购物车出现购物车详情内容
      */
     gwcEvent: function () {
-
+        var starty;
+        //手指接触屏幕
+        var abcFlag = false;
+        var top = 0;
+        var interval;
         $('.gwc_bottom').click(function () {
             var $li = $('.gwcDetail_content li');
             if ($li.length != '0') {
                 if ($('#gec_detail').is(':hidden')) {
                     $('#gec_detail').show();
                     $('#wrap').show();
-                    // $('.detail_wrap').css('position','fixed');
-                    // var u = navigator.userAgent;
-                    // var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
-                    // if (isAndroid) {
-                    //     show_popwindow();
-                    // }
-                    // function show_popwindow() {
-                    //     //页面加载时，弹出框是隐藏的，当点击弹出按钮时，弹出框弹出
-                    //     document.getElementById("wrap").style.display = "block";
-                    //     //下面的两句是为了防止底部页面滑动。注：必须对html和body都设置overflow:hidden，移动端才能禁止滑动
-                    //     document.documentElement.style.overflow = 'hidden';
-                    //     document.body.style.overflow = 'hidden';
-                    // }
-                    //
+                    // $('.detail_wrap').css('position', 'fixed');
+                    var u = navigator.userAgent;
+                    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                    if (isAndroid) {
+                        show_popwindow();
+                    }
+                    function show_popwindow() {
+                        //页面加载时，弹出框是隐藏的，当点击弹出按钮时，弹出框弹出
+                        document.getElementById("wrap").style.display = "block";
+                        //下面的两句是为了防止底部页面滑动。注：必须对html和body都设置overflow:hidden，移动端才能禁止滑动
+                        document.documentElement.style.overflow = 'hidden';
+                        document.body.style.overflow = 'hidden';
+                    }
+
+                    document.getElementById('abc').addEventListener("touchstart", function (e) {
+                        window.event.returnValue = false;
+                    }, false);
+
                     // document.addEventListener('touchmove', function (event) {
                     //     //判断条件,条件成立才阻止背景页面滚动,其他情况不会再影响到页面滚动
                     //     if (!$(".wrap").is(":hidden")) {
                     //         event.preventDefault();
+                    //
                     //     }
-                    // });
-                    // document.getElementById("wrap").ontouchstart = function (e) {
-                    //     e.preventDefault();
-                    // };
+                    // }, {passive: false});
+                    document.getElementById("wrap").ontouchstart = function (e) {
+                        e.preventDefault();
+                    };
                     var body_width = parseInt($(window).width());
                     var body_height = parseInt($(window).height());
                     $('#wrap').css({'width': body_width, 'height': body_height});
@@ -359,7 +368,6 @@ var freshIndex = {
         $(document).on('click', '.plus', function () {
             var goods_id = $(this).parents('li').attr('data-id');
             var cate_id = $(this).attr('cate_id');
-            alert(openid);
             freshIndex.gotoGwcEvent(event, $(this));
             $.ajax({
                 url: ADDCARTURL,
@@ -638,29 +646,34 @@ $(function () {
     var code = getUrlParam('code');
 
 
-    $.ajax({
-        url: OPENIDURL,
-        type: "GET",
-        async: true,
-        data: {
-            code: code
-        },
-        dataType: 'jsonp',
-        success: function (data) {
-            alert(data.code);
-            if (data.code == '000') {
-                alert(data.data.nickname);
-                openid = data.data.openid;
-                sessionStorage.setItem('openid', data.data.openid);
-                // sessionStorage.setItem('openid', 'weww1');
-                // freshIndex.getTodayRecommend();
-                freshIndex.init();
-            } else {
-                alert(data.msg);
+    if (sessionStorage.getItem('openid') == null) {
+        $.ajax({
+            url: OPENIDURL,
+            type: "GET",
+            async: true,
+            data: {
+                code: code
+            },
+            dataType: 'jsonp',
+            success: function (data) {
+                if (data.code == '000') {
+                    openid = data.data.openid;
+                    sessionStorage.setItem('openid', data.data.openid);
+                    // sessionStorage.setItem('openid', 'weww1');
+                    freshIndex.init();
+                } else {
+                    alert(data.msg);
+                }
+            },
+            error: function (data) {
             }
-        },
-        error: function (data) {
-            alert(1);
+        });
+    } else {
+
+        openid = sessionStorage.getItem('openid');
+        if (openid != null) {
+            freshIndex.init();
         }
-    });
+
+    }
 });
