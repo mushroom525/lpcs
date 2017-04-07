@@ -37,7 +37,7 @@ class OrderController extends Controller
         $map['goods_num']=$quantity;
         $map['goods_amount']=$amount;
         $map['distribution_cost']=$_REQUEST['distribution_cost'];
-        $totalamount=$map['goods_amount']+$map['distribution_cost'];
+        $map['total_amount']=$map['goods_amount']+$map['distribution_cost'];
         $orderadd=$order->add($map);
         if($orderadd){
             $carts=$cart->where("user_openid='%s'",$map['user_openid'])->select();
@@ -57,7 +57,8 @@ class OrderController extends Controller
             $openId = $map['user_openid'];
             $Out_trade_no=$map['order_id'];
             $Body='良品菜市订单支付'.$Out_trade_no;
-            $Total_fee=$totalamount*100;
+//            $Total_fee=$map['total_amount']*100;
+            $Total_fee=1;
             $input = new \WxPayUnifiedOrder();
             $input->SetBody($Body);
             $input->SetOut_trade_no($Out_trade_no);
@@ -81,6 +82,37 @@ class OrderController extends Controller
             $arr = array(
                 "code" => "111",
                 "msg" => "订单生成失败",
+                "data" => ""
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
+    }
+    public function orderlist(){
+        $callback=$_REQUEST['callback'];
+        $user_openid=$_REQUEST['openid'];
+        $order=D('order');
+        $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id and o.user_openid='%s'",$user_openid)->select();
+        foreach($orderlist as $key=>$val){
+            switch ($val['order_step']){
+                case 0: $order_step_ch='待支付';break;
+                case 1: $order_step_ch='待商户接单';break;
+                case 2: $order_step_ch='待配送';break;
+                case 3: $order_step_ch='已完成';break;
+                case 4: $order_step_ch='已取消';break;
+            }
+            $orderlist[$key]['order_step_ch']=$order_step_ch;
+        }
+        if($orderlist){
+            $arr = array(
+                "code" => "000",
+                "msg" => "查询成功",
+                "data" => $orderlist
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }else{
+            $arr = array(
+                "code" => "111",
+                "msg" => "查询失败",
                 "data" => ""
             );
             echo $callback . "(" . HHJson($arr) . ")";
