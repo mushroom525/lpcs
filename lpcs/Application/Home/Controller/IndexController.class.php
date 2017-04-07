@@ -39,10 +39,6 @@ class IndexController extends Controller
             echo $callback . "(" . HHJson($arr) . ")";
         }
     }
-    //$url  接口url string
-    //$type 请求类型string
-    //$res  返回类型string
-    //$arr= 请求参数string
     public function getJson($url)
     {
         $ch = curl_init();

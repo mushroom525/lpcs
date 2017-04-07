@@ -34,7 +34,8 @@ callback            回调
 callback(
 code         000
 data         {
-                    jsApiParameters
+                    jsApiParameters   微信下单请求参数
+                    order_id          订单id
              }
 msg          ""
 )

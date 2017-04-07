@@ -44,6 +44,13 @@ class PayNotifyCallBack extends WxPayNotify
 			$msg = "订单查询失败";
 			return false;
 		}
+		if($data['return_code']=='SUCCESS'&& $data['result']=='SUCCESS'){
+            $out_trade_no = $data['out_trade_no'];
+            $order=D('order');
+            $map['order_step']=1;
+            $map['wx_orderid']=$data['transaction_id'];
+            $order-> where("order_id='%s'",$out_trade_no)->save($map);
+        }
 		return true;
 	}
 }

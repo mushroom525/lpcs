@@ -22,7 +22,7 @@ class OrderController extends Controller
         $map['order_id'] = $str1 . $str2;
         $map['user_openid'] = $_REQUEST['openid'];
         $map['address_id']=$_REQUEST['address_id'];
-        $map['order_time']=time();
+        $map['order_time']=date('Y-m-d H:i:s', time());
         $map['appointment_time']=$_REQUEST['appointment_time'];
         $map['remark']=$_REQUEST['remark'];
         $amount=0;
@@ -37,6 +37,7 @@ class OrderController extends Controller
         $map['goods_num']=$quantity;
         $map['goods_amount']=$amount;
         $map['distribution_cost']=$_REQUEST['distribution_cost'];
+        $totalamount=$map['goods_amount']+$map['distribution_cost'];
         $orderadd=$order->add($map);
         if($orderadd){
             $carts=$cart->where("user_openid='%s'",$map['user_openid'])->select();
@@ -54,15 +55,15 @@ class OrderController extends Controller
             vendor('Pay.JSAPI');
             $tools = new \JsApiPay();
             $openId = $map['user_openid'];
-            $Out_trade_no=date('YHis').rand(100,1000);
-            $Total_fee='测试';
-            $Body='啥也不说';
-            $Total_fee=1;
+            $Out_trade_no=$map['order_id'];
+            $Body='良品菜市订单支付'.$Out_trade_no;
+            $Total_fee=$totalamount*100;
             $input = new \WxPayUnifiedOrder();
             $input->SetBody($Body);
             $input->SetOut_trade_no($Out_trade_no);
             $input->SetTotal_fee($Total_fee);
-            $input->SetNotify_url("http://www.heeyhome.com/pay/notify.php");
+            $notify_url=LIB_PATH.'Vendor/Pay/example/notify.php';
+            $input->SetNotify_url($notify_url);
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = \WxPayApi::unifiedOrder($input);
@@ -70,7 +71,9 @@ class OrderController extends Controller
             $arr = array(
                 "code" => "000",
                 "msg" => "",
-                "data" => $jsApiParameters
+                "data" => array(
+                                  "jsApiParameters"=>$jsApiParameters,
+                    "order_id"=>$map['order_id'])
             );
             echo $callback . "(" . HHJson($arr) . ")";
 
@@ -82,6 +85,5 @@ class OrderController extends Controller
             );
             echo $callback . "(" . HHJson($arr) . ")";
         }
-
     }
 }

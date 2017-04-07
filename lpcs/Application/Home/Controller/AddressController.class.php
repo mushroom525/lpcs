@@ -17,7 +17,7 @@ class AddressController extends Controller
         $address=D('address');
         $data['user_openid']=$user_id;
         $data['is_del']=0;
-        $addresslist=$address->where($data)->select();
+        $addresslist=$address->where($data)->order('address_id desc')->select();
         if ($addresslist) {
             $arr = array(
                 "code" => "000",
