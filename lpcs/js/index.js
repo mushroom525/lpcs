@@ -359,6 +359,7 @@ var freshIndex = {
         $(document).on('click', '.plus', function () {
             var goods_id = $(this).parents('li').attr('data-id');
             var cate_id = $(this).attr('cate_id');
+            alert(openid);
             freshIndex.gotoGwcEvent(event, $(this));
             $.ajax({
                 url: ADDCARTURL,
@@ -646,7 +647,9 @@ $(function () {
         },
         dataType: 'jsonp',
         success: function (data) {
+            alert(data.code);
             if (data.code == '000') {
+                alert(data.data.nickname);
                 openid = data.data.openid;
                 sessionStorage.setItem('openid', data.data.openid);
                 // sessionStorage.setItem('openid', 'weww1');
@@ -657,6 +660,7 @@ $(function () {
             }
         },
         error: function (data) {
+            alert(1);
         }
     });
 });

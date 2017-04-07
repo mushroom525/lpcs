@@ -175,7 +175,7 @@ var addressEv = {
                         $('#man').prev().addClass('em_choose');
                     }
                 } else {
-                    alert(data.msg);
+                    layer.msg(data.msg);
                 }
             },
             error: function (data) {
@@ -193,22 +193,22 @@ var addressEv = {
             var $address_input = $('.address_input').val();//详细地址
             var $room_input = $('.room_input').val();//门牌号
             if ($name == '' || $name == null) {
-                alert('请输入姓名');
+                layer.msg('请输入姓名');
                 return false;
             } else if ($tel == '' || $tel == null) {
-                alert('请输入手机号');
+                layer.msg('请输入手机号');
                 return false;
             } else if (!PHONEREG.test($tel)) {
-                alert('手机号码格式不正确');
+                layer.msg('手机号码格式不正确');
                 return false;
             } else if ($area == '' || $area == null) {
-                alert('请输入小区');
+                layer.msg('请输入小区');
                 return false;
             } else if ($address_input == '' || $address_input == null) {
-                alert('请输入详细地址');
+                layer.msg('请输入详细地址');
                 return false;
             } else if ($room_input == '' || $room_input == null) {
-                alert('请输入门牌号');
+                layer.msg('请输入门牌号');
                 return false;
             } else {
                 $.ajax({
@@ -230,7 +230,7 @@ var addressEv = {
                         if (data.code == '000') {
                             window.location.href = path + 'address.html';
                         } else {
-                            alert(data.msg);
+                            layer.msg(data.msg);
                         }
                     },
                     error: function (data) {
@@ -251,22 +251,22 @@ var addressEv = {
             var $address_input = $('.address_input').val();//详细地址
             var $room_input = $('.room_input').val();//门牌号
             if ($name == '' || $name == null) {
-                alert('请输入姓名');
+                layer.msg('请输入姓名');
                 return false;
             } else if ($tel == '' || $tel == null) {
-                alert('请输入手机号');
+                layer.msg('请输入手机号');
                 return false;
             } else if (!PHONEREG.test($tel)) {
-                alert('手机号码格式不正确');
+                layer.msg('手机号码格式不正确');
                 return false;
             } else if ($area == '' || $area == null) {
-                alert('请输入小区');
+                layer.msg('请输入小区');
                 return false;
             } else if ($address_input == '' || $address_input == null) {
-                alert('请输入详细地址');
+                layer.msg('请输入详细地址');
                 return false;
             } else if ($room_input == '' || $room_input == null) {
-                alert('请输入门牌号');
+                layer.msg('请输入门牌号');
                 return false;
             } else {
                 $.ajax({
@@ -287,7 +287,7 @@ var addressEv = {
                         if (data.code == '000') {
                             window.location.href = path + 'address.html';
                         } else {
-                            alert(data.msg);
+                            layer.msg(data.msg);
                         }
                     },
                     error: function (data) {
@@ -315,7 +315,7 @@ var addressEv = {
                     if (data.code == '000') {
                         window.location.href = path + 'address.html';
                     } else {
-                        alert(data.msg);
+                        layer.msg(data.msg);
                     }
                 },
                 error: function (data, a, b) {

@@ -59,8 +59,16 @@ var addressEv = {
 
         // getHourAndMinutesArr('08:15', '20:15', 15);
         //测试数据
+
         var timeObj = {
-            "今日": getHourAndMinutesArr(time, '20:15', 15),
+            "今日": function () {
+                var arr = [time];
+                var timeArr = time.split(':');
+                timeArr[1] = timeArr[1] - timeArr[1] % 15 + 15;
+                var timeTempArr = getHourAndMinutesArr(timeArr[0] + ':' + timeArr[1], '20:15', 15);
+                arr.concat(timeTempArr);
+                return arr;
+            },
             "明日": getHourAndMinutesArr('08:15', '20:15', 15)
         };
         // console.log(timeObj);
