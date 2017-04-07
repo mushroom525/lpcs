@@ -87,7 +87,7 @@ var addressEv = {
                     $('.addressWrap').empty();
                     addressEv.addressList();
                 } else {
-                    alert(data.msg);
+                    layer.msg(data.msg);
                 }
             }, error: function (data) {
 
