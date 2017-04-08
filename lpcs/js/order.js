@@ -6,9 +6,10 @@ var ADDRESSLISTURL = BASEURL + 'address/index'; // 地址列表
 var GWCINFOURL = BASEURL + 'cart/index'; // 获取默认购物车内容
 var CONFIRMPAYURL = BASEURL + 'order/orderproduce'; // 确认付款
 
+
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
 
-var openid = sessionStorage.getItem('openid');
+var openid = sessionStorage.getItem('openid');//o-X7mw822W0t7e9u7gqwkrxsb3-I
 
 var addressEv = {
     init: function () {
@@ -63,10 +64,10 @@ var addressEv = {
         //测试数据
 
         function today() {
-            var arr = ['尽快送达 | 预计' + time];
             var timeArr1 = time.split(':');
+            var arr = ['尽快送达 | 预计' + (parseInt(timeArr1[0]) + 1) + ':' + timeArr1[1]];
             timeArr1[1] = timeArr1[1] - timeArr1[1] % 15 + 15;
-            var timeTempArr = getHourAndMinutesArr(timeArr1[0] + ':' + timeArr1[1], '20:15', 15);
+            var timeTempArr = getHourAndMinutesArr((parseInt(timeArr1[0]) + 1) + ':' + timeArr1[1], '20:15', 15);
             arr = arr.concat(timeTempArr);
             return arr;
         }
@@ -78,7 +79,9 @@ var addressEv = {
         // console.log(timeObj);
 
         $("#Jleft_slide ul").html(self.spliceDataInfoEvent(timeObj));
+        $("#Jleft_slide ul li").data('time', timeObj);
         $("#J_scroll_holder ul ").html(self.spliceTimeInfoEvent(timeObj, "今日"));
+        $("#J_scroll_holder ul li").data('j', timeObj);
         self.selectHiddenEvent(timeObj, "今日", 0)
 
     },
@@ -106,31 +109,31 @@ var addressEv = {
         var $content = $('.shop_content ul');
         $content.empty();
         $.ajax({
-            url: GWCINFOURL,
-            type: "GET",
-            async: true,
-            data: {
-                openid: openid
-            },
-            dataType: 'jsonp',
-            success: function (data) {
-                console.log(data.data);
-                if (data.data != '') {
-                    $.each(data.data.carts, function (i, v) {
-                        var stitching = '<li>';
-                        stitching += '<span class="v_name">' + v.goods_name + '</span>';
-                        stitching += '<span class="v_num">' + v.goods_num + '</span>';
-                        stitching += '<span class="v_price">￥' + v.discount_price + '</span>';
-                        stitching += '</li>';
-                        $content.append(stitching);
-                    });
-                    var amount = parseFloat(data.data.status.amount) + parseFloat($('#psf').html());
-                    $('.order_money span').html('￥' + amount);
+                url: GWCINFOURL,
+                type: "GET",
+                async: true,
+                data: {
+                    openid: openid
+                },
+                dataType: 'jsonp',
+                success: function (data) {
+                    console.log(data.data);
+                    if (data.data != '') {
+                        $.each(data.data.carts, function (i, v) {
+                            var stitching = '<li>';
+                            stitching += '<span class="v_name">' + v.goods_name + '</span>';
+                            stitching += '<span class="v_num">' + v.goods_num + '</span>';
+                            stitching += '<span class="v_price">￥' + v.discount_price + '</span>';
+                            stitching += '</li>';
+                            $content.append(stitching);
+                        });
+                        var amount = parseFloat(data.data.status.amount) + parseFloat($('#psf').html());
+                        $('.order_money span').html('￥' + amount);
+                    }
+                },
+                error: function (data) {
                 }
-            },
-            error: function (data) {
-            }
-        });
+            });
     },
     /**
      * 保存地址数据
@@ -220,7 +223,8 @@ var addressEv = {
 
         $(document).on("click", "#Jleft_slide ul li", function () {
             $(this).addClass("active").siblings("li").removeClass("active");
-            $("#J_scroll_holder ul ").html(self.spliceTimeInfoEvent(JSON.parse($(this).data("time")), $(this).data("day")));
+            $("#J_scroll_holder ul ").html(self.spliceTimeInfoEvent($(this).data("time"), $(this).data("day")));
+            $("#J_scroll_holder ul li").data("j", $(this).data("time"));
             self.selectHiddenEvent($(this).data("time"), $(this).data("day"), 0)
         });
     },
@@ -231,8 +235,7 @@ var addressEv = {
     spliceDataInfoEvent: function (Obj) {
         var vrStr = '';
         $.each(Obj, function (i, v) {
-            vrStr += '<li class="' + (i == '今日' ? "active" : "") + '" data-day = ' + i + " data-time = " + JSON.stringify(Obj) + ">" + i + '</li>';
-
+            vrStr += '<li class="' + (i == '今日' ? "active" : "") + '" data-day = "' + i + '" data-time = ' + JSON.stringify(Obj) + '>' + i + '</li>';
         });
         return vrStr;
     },
@@ -241,10 +244,9 @@ var addressEv = {
      * @param {Object} Obj 对象
      */
     spliceTimeInfoEvent: function (Obj, name) {
-
         var vrStr = '';
         $.each(Obj[name], function (i, v) {
-            vrStr += '<li data-i="' + name + '" data-j=' + JSON.stringify(Obj) + '><p>' + v + '</p><i class="' + (i == 0 ? "click" : "") + '"></i></li>';
+            vrStr += '<li data-i="' + name + '"><p>' + v + '</p><i class="' + (i == 0 ? "click" : "") + '"></i></li>';
         });
         return vrStr;
     },
@@ -289,7 +291,7 @@ var addressEv = {
                     success: function (data) {
                         if (data.code == '000') {
                             var parsedata = JSON.parse(data.data.jsApiParameters);
-                            // callpay(parsedata);
+                            callpay(parsedata);
                         } else {
                             layer.msg(data.msg);
                         }

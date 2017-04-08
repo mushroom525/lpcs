@@ -16,7 +16,7 @@ var DELCARTURL = BASEURL + 'cart/del'; // 删除购物车
 var EMPTYCARTURL = BASEURL + 'cart/emptycart'; // 清空购物车
 
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
-var openid = '';
+var openid = '';//o-X7mw822W0t7e9u7gqwkrxsb3-I
 
 var freshIndex = {
     init: function () {
@@ -263,6 +263,7 @@ var freshIndex = {
      * 购物车内容初始化
      */
     gwcContentInit: function () {
+
         var $content = $('.gwcDetail_content ul');
         $content.empty();
         $.ajax({
@@ -631,6 +632,7 @@ var freshIndex = {
 };
 
 $(function () {
+    // freshIndex.init();
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
         var r = window.location.search.substr(1).match(reg);  //匹配目标参数
@@ -639,6 +641,7 @@ $(function () {
     }
 
     var code = getUrlParam('code');
+
 
 
     if (sessionStorage.getItem('openid') == null) {
