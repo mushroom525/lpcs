@@ -130,7 +130,6 @@ class OrderController extends Controller
     }
     public function orderinfo(){
         $callback=$_REQUEST['callback'];
-        $user_openid=$_REQUEST['openid'];
         $order_id=$_REQUEST['order_id'];
         $order=D('order');
         $ordereach=D('order_each');
@@ -162,6 +161,37 @@ class OrderController extends Controller
             $arr = array(
                 "code" => "111",
                 "msg" => "查询失败",
+                "data" => ""
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
+    }
+    public function ordercancel(){
+        $callback=$_REQUEST['callback'];
+        $order_id=$_REQUEST['order_id'];
+        $order=D('order');
+        $order_step=$order->where("order_id='%s'",$order_id)->getField('order_step');
+        if($order_step==1){
+            $orderedit=$order-> where("order_id='%s'",$order_id)->setField('order_step','4');
+            if($orderedit){
+                $arr = array(
+                    "code" => "000",
+                    "msg" => "取消成功",
+                    "data" => ""
+                );
+                echo $callback . "(" . HHJson($arr) . ")";
+            }else{
+                $arr = array(
+                    "code" => "111",
+                    "msg" => "取消失败",
+                    "data" => ""
+                );
+                echo $callback . "(" . HHJson($arr) . ")";
+            }
+        }else{
+            $arr = array(
+                "code" => "112",
+                "msg" => "该订单不能取消",
                 "data" => ""
             );
             echo $callback . "(" . HHJson($arr) . ")";
