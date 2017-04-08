@@ -116,11 +116,6 @@ var freshIndex = {
      * 点击购物车出现购物车详情内容
      */
     gwcEvent: function () {
-        var starty;
-        //手指接触屏幕
-        var abcFlag = false;
-        var top = 0;
-        var interval;
         $('.gwc_bottom').click(function () {
             var $li = $('.gwcDetail_content li');
             if ($li.length != '0') {
@@ -141,9 +136,9 @@ var freshIndex = {
                         document.body.style.overflow = 'hidden';
                     }
 
-                    document.getElementById('abc').addEventListener("touchstart", function (e) {
-                        window.event.returnValue = false;
-                    }, false);
+                    // document.getElementById('abc').addEventListener("touchstart", function (e) {
+                    //     window.event.returnValue = false;
+                    // }, false);
 
                     // document.addEventListener('touchmove', function (event) {
                     //     //判断条件,条件成立才阻止背景页面滚动,其他情况不会再影响到页面滚动

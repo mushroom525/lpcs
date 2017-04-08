@@ -1174,11 +1174,11 @@ a:visited, a:hover, a:focus {
 }
 
 .orderList_right .again_order {
-    color: white;
-    background: #76d7c3;
+    /*color: white;*/
+    /*background: #76d7c3;*/
 }
 
-.orderList_right .suggestion {
+.orderList_right .order_right {
     right: 7.5rem;
 }
 
