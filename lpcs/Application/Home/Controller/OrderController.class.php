@@ -133,6 +133,38 @@ class OrderController extends Controller
         $user_openid=$_REQUEST['openid'];
         $order_id=$_REQUEST['order_id'];
         $order=D('order');
-        $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,a.area,a.address.a.room,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id and o.user_openid='%s'",$user_openid)->select();
+        $ordereach=D('order_each');
+        $good=D('goods');
+        $orderinfo= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,a.area,a.address,a.room,o.order_step,o.order_id,o.order_time,o.goods_num,o.goods_amount,o.total_amount,o.distribution_cost')->where("a.address_id=o.address_id and o.order_id='%s'",$order_id)->find();
+        if($orderinfo){
+                switch ($orderinfo['order_step']){
+                    case 0: $order_step_ch='待支付';break;
+                    case 1: $order_step_ch='待商户接单';break;
+                    case 2: $order_step_ch='待配送';break;
+                    case 3: $order_step_ch='已完成';break;
+                    case 4: $order_step_ch='已取消';break;
+                }
+                $orderinfo['order_step_ch']=$order_step_ch;
+                $ordergoods=$ordereach->where("order_id='%s'",$order_id)->select();
+                foreach($ordergoods as $key=>$val){
+                    $goodsinfo=$good->where('goods_id='.$val['goods_id'])->find();
+                    $goodsinfo['goods_num']=$val['goods_num'];
+                    $ordergoods[$key]=$goodsinfo;
+                }
+                $orderinfo['goods']=$ordergoods;
+            $arr = array(
+                "code" => "000",
+                "msg" => "查询成功",
+                "data" => $orderinfo
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }else{
+            $arr = array(
+                "code" => "111",
+                "msg" => "查询失败",
+                "data" => ""
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
     }
 }
