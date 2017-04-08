@@ -40,6 +40,10 @@ a:visited, a:hover, a:focus {
     color: white;
 }
 
+i {
+    font-style: normal;
+}
+
 /* 清浮动 */
 .clearFix:after {
     content: "";
@@ -1225,4 +1229,143 @@ a:visited, a:hover, a:focus {
 
 #psf {
     font-style: normal;
+}
+
+.orderDetail {
+    margin-top: 5rem;
+}
+
+.order_status {
+    width: 100%;
+    height: 10rem;
+    background: url("../img/orderStatus_bg.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+.status_top {
+    color: white;
+    margin-left: 5rem;
+}
+
+.status_top i {
+    width: 2.8rem;
+    height: 2.8rem;
+    display: inline-block;
+    background: url("../img/success_pay.png") no-repeat;
+    background-size: 100% 100%;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.status_top b {
+    font-weight: normal;
+    font-size: 1.6rem;
+}
+
+.status_bottom {
+    margin-top: 2rem;
+    position: relative;
+    height: 3rem;
+}
+
+.status_bottom a {
+    width: 10rem;
+    height: 3rem;
+    line-height: 3rem;
+    display: inline-block;
+    color: white;
+    border: 1px solid white;
+    border-radius: 4px;
+    text-align: center;
+    position: absolute;
+}
+
+.status_bottom .again_orderDetail {
+    right: 2rem;
+}
+
+.status_bottom .contact_shop {
+    right: 13rem;
+}
+
+.order_step {
+    margin-top: 3rem;
+}
+
+.step_img {
+    padding: 0 1.5rem;
+}
+
+.step_content {
+    display: flex;
+    padding: 0 1rem;
+    margin-top: 1rem;
+}
+
+.step_time {
+    display: flex;
+    padding: 0 1rem;
+    margin-top: 0.5rem;
+}
+
+.step_content span {
+    flex: 3;
+}
+
+.step_time span {
+    flex: 3;
+}
+
+.step_content .content2 {
+    text-align: center;
+}
+
+.step_content .content3 {
+    text-align: right;
+}
+
+.step_time .time2 {
+    text-align: center;
+}
+
+.step_time .time3 {
+    text-align: right;
+}
+
+.order_detail .contact_nameWrap, .order_info .contact_nameWrap, .order_remark .contact_nameWrap {
+    margin-top: 2rem;
+}
+
+.total {
+    width: 95%;
+    margin: 0 auto;
+    padding: 1rem 0.5rem;
+    display: flex;
+}
+
+.shop_content li span, .total span {
+    display: inline-block;
+    flex: 3;
+}
+
+.order_info_list li {
+    padding: 1rem 1.5rem;
+    display: flex;
+}
+
+.order_info_list .list_left {
+    flex: 2;
+}
+
+.order_info_list .list_right {
+    flex: 8;
+    text-align: right;
+}
+
+.order_remark {
+    margin-bottom: 5rem;
+}
+
+.order_remark p {
+    padding: 1.5rem;
 }
