@@ -289,7 +289,7 @@ var addressEv = {
                     success: function (data) {
                         if (data.code == '000') {
                             var parsedata = JSON.parse(data.data.jsApiParameters);
-                            callpay(parsedata);
+                            // callpay(parsedata);
                         } else {
                             layer.msg(data.msg);
                         }
