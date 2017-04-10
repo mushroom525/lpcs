@@ -311,7 +311,7 @@ class OrderController extends Controller
                 $openId = $orderinfo['user_openid'];
                 $Out_trade_no=$order_id;
                 $Body='良品菜市订单支付';
-                //$Total_fee=$map['total_amount']*100;
+                //$Total_fee=$orderinfo['total_amount']*100;
                 $Total_fee=1;
                 $input = new \WxPayUnifiedOrder();
                 $input->SetBody($Body);

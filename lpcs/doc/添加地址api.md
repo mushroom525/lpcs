@@ -24,6 +24,8 @@ phone               手机
 area                小区/大厦/学校
 address             详细地址
 room                门牌号
+receiver_lat        地址维度（高德坐标系）
+receiver_lng        地址经度（高德坐标系）
 
 callback            回调
 ```

@@ -43,6 +43,8 @@ class AddressController extends Controller
         $data['area']=$_REQUEST['area'];
         $data['address']=$_REQUEST['address'];
         $data['room']=$_REQUEST['room'];
+        $data['receiver_lat']=$_REQUEST['receiver_lat'];
+        $data['receiver_lng']=$_REQUEST['receiver_lng'];
         $address=D('address');
         $addaddress=$address->add($data);
         if ($addaddress) {
@@ -134,6 +136,8 @@ class AddressController extends Controller
         $data['area']=$_REQUEST['area'];
         $data['address']=$_REQUEST['address'];
         $data['room']=$_REQUEST['room'];
+        $data['receiver_lat']=$_REQUEST['receiver_lat'];
+        $data['receiver_lng']=$_REQUEST['receiver_lng'];
         $address=D('address');
         $updateaddress=$address->where('address_id='.$address_id)->save($data);
         if ($updateaddress===false) {
