@@ -5,6 +5,7 @@ var BASEURL = 'http://www.heeyhome.com/lpcs/home/';
 var ADDRESSLISTURL = BASEURL + 'address/index'; // 地址列表
 var GWCINFOURL = BASEURL + 'cart/index'; // 获取默认购物车内容
 var CONFIRMPAYURL = BASEURL + 'order/orderproduce'; // 确认付款
+var ORDERSTEPURL = BASEURL + 'order/order_step'; // 判断是否支付成功
 
 
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
@@ -109,31 +110,31 @@ var addressEv = {
         var $content = $('.shop_content ul');
         $content.empty();
         $.ajax({
-                url: GWCINFOURL,
-                type: "GET",
-                async: true,
-                data: {
-                    openid: openid
-                },
-                dataType: 'jsonp',
-                success: function (data) {
-                    console.log(data.data);
-                    if (data.data != '') {
-                        $.each(data.data.carts, function (i, v) {
-                            var stitching = '<li>';
-                            stitching += '<span class="v_name">' + v.goods_name + '</span>';
-                            stitching += '<span class="v_num">' + v.goods_num + '</span>';
-                            stitching += '<span class="v_price">￥' + v.discount_price + '</span>';
-                            stitching += '</li>';
-                            $content.append(stitching);
-                        });
-                        var amount = parseFloat(data.data.status.amount) + parseFloat($('#psf').html());
-                        $('.order_money span').html('￥' + amount);
-                    }
-                },
-                error: function (data) {
+            url: GWCINFOURL,
+            type: "GET",
+            async: true,
+            data: {
+                openid: openid
+            },
+            dataType: 'jsonp',
+            success: function (data) {
+                console.log(data.data);
+                if (data.data != '') {
+                    $.each(data.data.carts, function (i, v) {
+                        var stitching = '<li>';
+                        stitching += '<span class="v_name">' + v.goods_name + '</span>';
+                        stitching += '<span class="v_num">' + v.goods_num + '</span>';
+                        stitching += '<span class="v_price">￥' + v.discount_price + '</span>';
+                        stitching += '</li>';
+                        $content.append(stitching);
+                    });
+                    var amount = parseFloat(data.data.status.amount) + parseFloat($('#psf').html());
+                    $('.order_money span').html('￥' + amount);
                 }
-            });
+            },
+            error: function (data) {
+            }
+        });
     },
     /**
      * 保存地址数据
@@ -168,12 +169,12 @@ var addressEv = {
                                 $('.order_address').attr('data-id', v.address_id);
                                 $('.address_name').html(v.name);
                                 $('.address_tel').html(v.phone);
-                                $('.address_room').html(v.area + '' + v.address + '' + v.room);
+                                $('.address_room').html( v.address + '' + v.room);
                             } else {
                                 $('.order_address').attr('data-id', data.data[0].address_id);
                                 $('.address_name').html(data.data[0].name);
                                 $('.address_tel').html(data.data[0].phone);
-                                $('.address_room').html(data.data[0].area + '' + data.data[0].address + '' + data.data[0].room);
+                                $('.address_room').html( data.data[0].address + '' + data.data[0].room);
                             }
                         })
                     } else {
@@ -291,7 +292,8 @@ var addressEv = {
                     success: function (data) {
                         if (data.code == '000') {
                             var parsedata = JSON.parse(data.data.jsApiParameters);
-                            callpay(parsedata);
+                            var orderid = data.data.order_id;
+                            callpay(parsedata, orderid);
                         } else {
                             layer.msg(data.msg);
                         }
@@ -312,7 +314,7 @@ var addressEv = {
 /**
  * 微信支付
  */
-function callpay(jsStr) {
+function callpay(jsStr, orderid) {
     if (typeof WeixinJSBridge == "undefined") {
         if (document.addEventListener) {
             document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -321,13 +323,13 @@ function callpay(jsStr) {
             document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
         }
     } else {
-        jsApiCall(jsStr);
+        jsApiCall(jsStr, orderid);
     }
 }
 
 
 //调用微信JS api 支付
-function jsApiCall(jsStr) {
+function jsApiCall(jsStr, orderid) {
 
     WeixinJSBridge.invoke(
         'getBrandWCPayRequest',
@@ -342,16 +344,35 @@ function jsApiCall(jsStr) {
         function (res) {
             WeixinJSBridge.log(res.err_msg);
             if (res.err_msg == 'get_brand_wcpay_request:cancel') {
-                layer.msg("您已取消了此次支付");
+                layer.alert("您已取消了此次支付");
+                window.location.href = path + 'orderList.html';
                 return;
             } else if (res.err_msg == 'get_brand_wcpay_request:fail') {
-                layer.msg("支付失败");
+                layer.alert("支付失败");
+                window.location.href = path + 'orderList.html';
                 return;
             } else if (res.err_msg == 'get_brand_wcpay_request:ok') {
-                alert("支付成功！");//跳转到订单页面
+                $.ajax({
+                    url: ORDERSTEPURL,
+                    type: "GET",
+                    async: true,
+                    data: {
+                        order_id: orderid
+                    },
+                    dataType: 'jsonp',
+                    success: function (data) {
+                        if (data.code == '000') {
+                            sessionStorage.setItem('orderDetailId', orderid);
+                            window.location.href = path + 'orderDetail.html';
+                        }
+                    },
+                    error: function (data) {
+                    }
+                });
 
             } else {
-                layer.msg("未知错误" + res.error_msg);
+                layer.alert("未知错误" + res.error_msg);
+                window.location.href = path + 'orderList.html';
                 return;
             }
         }

@@ -660,7 +660,7 @@ $(function () {
                     // sessionStorage.setItem('openid', 'weww1');
                     freshIndex.init();
                 } else {
-                    alert(data.msg);
+                    layer.msg(data.msg);
                 }
             },
             error: function (data) {
