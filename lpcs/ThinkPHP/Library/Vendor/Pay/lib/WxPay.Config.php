@@ -10,10 +10,10 @@ defined('SSLKEY_PATH') || define('SSLKEY_PATH', dirname(__FILE__).'/../../cert/a
 defined('CURL_PROXY_HOST') || define('CURL_PROXY_HOST', $_SERVER['REMOTE_ADDR']);
 
 //商户基本信息
-defined('APPID') || define('APPID','wx426b3015555a46be');//APPID
-defined('MCHID') || define('MCHID', '1225312702');//商户号
-defined('KEY') || define('KEY', 'e10adc3949ba59abbe56e057f20f883e');//密钥
-defined('APPSECRET') || define('APPSECRET', '01c6d59a3f9024db6336662ac95c8e74');//appsecret
+defined('APPID') || define('APPID','wxbb97c4417d90216b');//APPID
+defined('MCHID') || define('MCHID', '1451674702');//商户号
+defined('KEY') || define('KEY', 'A2ab61ad191f2f942b391ea397b86c79');//密钥
+defined('APPSECRET') || define('APPSECRET', '549a3b5ba125896f940ad0e236a9b52d');//appsecret
 
 class WxPayConfig
 {

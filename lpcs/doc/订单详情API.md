@@ -43,6 +43,9 @@ data         {
                     goods_amount         购买商品总金额
                     distribution_cost    配送费
                     total_amount         消费总金额
+                    pay_time             支付完成时间
+                    receiving_time       接单时间
+                    finish_time          完成时间
                     goods {
                                goods_id             商品id
                                goods_name           商品名

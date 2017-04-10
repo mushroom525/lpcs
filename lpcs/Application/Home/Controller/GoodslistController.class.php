@@ -22,12 +22,12 @@ class GoodslistController extends Controller
         $cart = D('cart');
         $goodslist = $goods->where($data)->order('goods_id desc')->select();
         if ($goodslist) {
-            foreach ($goodslist as $key=>$val){
-                $map['user_openid']=$user_openid;
-                $map['goods_id']=$val['goods_id'];
-                $goods_num=$cart->where($map)->getField('goods_num');
-                if(!$goods_num){
-                    $goods_num=0;
+            foreach ($goodslist as $key => $val) {
+                $map['user_openid'] = $user_openid;
+                $map['goods_id'] = $val['goods_id'];
+                $goods_num = $cart->where($map)->getField('goods_num');
+                if (!$goods_num) {
+                    $goods_num = 0;
                 }
                 $goodslist[$key]['goods_num'] = $goods_num;
             }
@@ -46,7 +46,6 @@ class GoodslistController extends Controller
             echo $callback . "(" . HHJson($arr) . ")";
         }
     }
-
     public function goodslist()
     {
         $callback = $_GET['callback'];
@@ -63,23 +62,33 @@ class GoodslistController extends Controller
             foreach ($goodslist as $ke => $va) {
                 $truecate_id = $val['cate_id'];
                 $goodslist[$ke]['cate_id'] = $truecate_id;
-                $data['user_openid']=$user_openid;
-                $data['goods_id']=$va['goods_id'];
-                $goods_num=$cart->where($data)->getField('goods_num');
-                if(!$goods_num){
-                    $goods_num=0;
+                $data['user_openid'] = $user_openid;
+                $data['goods_id'] = $va['goods_id'];
+                $goods_num = $cart->where($data)->getField('goods_num');
+                if (!$goods_num) {
+                    $goods_num = 0;
                 }
                 $goodslist[$ke]['goods_num'] = $goods_num;
             }
             $childcatelist[$key]['goods'] = $goodslist;
         }
-        $data['cate_id'] = array('like', "%{$cate_id}%");
-        $data['tag'] = 2;
-        $data['if_show'] = 1;
-        $discountgoods = $goods->where($data)->select();
-        $discount = array("cate_id" => "0", "cate_name" => "特惠供应", "goods" => $discountgoods);
-        array_unshift($childcatelist, $discount);
-        $discountlist = $goods->where('tag=2')->order('goods_id desc')->select();
+        $da['cate_id'] = array('like', "%{$cate_id}%");
+        $da['tag'] = 2;
+        $da['if_show'] = 1;
+        $discountgoods = $goods->where($da)->order('goods_id desc')->select();
+        if($discountgoods){
+            foreach($discountgoods as $k=>$v){
+                $dat['user_openid'] = $user_openid;
+                $dat['goods_id'] = $v['goods_id'];
+                $goods_num = $cart->where($dat)->getField('goods_num');
+                if (!$goods_num) {
+                    $goods_num = 0;
+                }
+                $discountgoods[$k]['goods_num'] = $goods_num;
+            }
+            $discount = array("cate_id" => "0", "cate_name" => "特惠供应", "goods" => $discountgoods);
+            array_unshift($childcatelist, $discount);
+        }
         $arr = array(
             "code" => "000",
             "msg" => "",

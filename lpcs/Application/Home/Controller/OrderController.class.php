@@ -56,15 +56,14 @@ class OrderController extends Controller
             $tools = new \JsApiPay();
             $openId = $map['user_openid'];
             $Out_trade_no=$map['order_id'];
-            $Body='良品菜市订单支付'.$Out_trade_no;
-//            $Total_fee=$map['total_amount']*100;
+            $Body='良品菜市订单支付';
+            //$Total_fee=$map['total_amount']*100;
             $Total_fee=1;
             $input = new \WxPayUnifiedOrder();
             $input->SetBody($Body);
             $input->SetOut_trade_no($Out_trade_no);
             $input->SetTotal_fee($Total_fee);
-            $notify_url=LIB_PATH.'Vendor/Pay/example/notify.php';
-            $input->SetNotify_url($notify_url);
+            $input->SetNotify_url("http://www.heeyhome.com/lpcs/ThinkPHP/Library/Vendor/Pay/example/notify.php");
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = \WxPayApi::unifiedOrder($input);
@@ -134,7 +133,7 @@ class OrderController extends Controller
         $order=D('order');
         $ordereach=D('order_each');
         $good=D('goods');
-        $orderinfo= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,a.area,a.address,a.room,o.order_step,o.order_id,o.order_time,o.goods_num,o.goods_amount,o.total_amount,o.distribution_cost')->where("a.address_id=o.address_id and o.order_id='%s'",$order_id)->find();
+        $orderinfo= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,a.address_id,a.area,a.address,a.room,o.order_step,o.order_id,o.order_time,o.goods_num,o.goods_amount,o.total_amount,o.distribution_cost,o.remark,o.pay_time,o.receiving_time,o.finish_time')->where("a.address_id=o.address_id and o.order_id='%s'",$order_id)->find();
         if($orderinfo){
                 switch ($orderinfo['order_step']){
                     case 0: $order_step_ch='待支付';break;
@@ -170,28 +169,126 @@ class OrderController extends Controller
         $callback=$_REQUEST['callback'];
         $order_id=$_REQUEST['order_id'];
         $order=D('order');
+        $refund=D('refund');
         $order_step=$order->where("order_id='%s'",$order_id)->getField('order_step');
-        if($order_step==1){
-            $orderedit=$order-> where("order_id='%s'",$order_id)->setField('order_step','4');
-            if($orderedit){
-                $arr = array(
-                    "code" => "000",
-                    "msg" => "取消成功",
-                    "data" => ""
-                );
-                echo $callback . "(" . HHJson($arr) . ")";
-            }else{
-                $arr = array(
-                    "code" => "111",
-                    "msg" => "取消失败",
-                    "data" => ""
-                );
-                echo $callback . "(" . HHJson($arr) . ")";
+        if($order_step==1 || $order_step==0){
+            if($order_step==1){
+                $orderinfo=$order->where("order_id='%s'",$order_id)->find();
+                $map['wx_orderid']=$orderinfo['wx_orderid'];
+                $map['order_id']=$order_id;
+                $map['order_amount']=$orderinfo['total_amount'];
+                $refundadd=$refund->add($map);
+                if($refundadd){
+                    $orderedit=$order-> where("order_id='%s'",$order_id)->setField('order_step','4');
+                    if($orderedit){
+                        $arr = array(
+                            "code" => "000",
+                            "msg" => "取消成功",
+                            "data" => ""
+                        );
+                        echo $callback . "(" . HHJson($arr) . ")";
+                    }else{
+                        $arr = array(
+                            "code" => "111",
+                            "msg" => "取消失败",
+                            "data" => ""
+                        );
+                        echo $callback . "(" . HHJson($arr) . ")";
+                    }
+                }else{
+                    $arr = array(
+                        "code" => "111",
+                        "msg" => "取消失败",
+                        "data" => ""
+                    );
+                    echo $callback . "(" . HHJson($arr) . ")";
+                }
+            }
+            if($order_step==0){
+                $orderedit=$order-> where("order_id='%s'",$order_id)->setField('order_step','4');
+                if($orderedit){
+                    $arr = array(
+                        "code" => "000",
+                        "msg" => "取消成功",
+                        "data" => ""
+                    );
+                    echo $callback . "(" . HHJson($arr) . ")";
+                }else{
+                    $arr = array(
+                        "code" => "111",
+                        "msg" => "取消失败",
+                        "data" => ""
+                    );
+                    echo $callback . "(" . HHJson($arr) . ")";
+                }
             }
         }else{
             $arr = array(
                 "code" => "112",
                 "msg" => "该订单不能取消",
+                "data" => ""
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
+    }
+    public function orderagain(){
+        $callback=$_REQUEST['callback'];
+        $order_id=$_REQUEST['order_id'];
+        $order=D('order');
+        $ordereach=D('order_each');
+        $cart=D('cart');
+        $goods=D('goods');
+        $user_openid=$order->where("order_id='%s'",$order_id)->getField('user_openid');
+        $iscart=$cart->where("user_openid='%s'",$user_openid)->select();
+        if($iscart){
+            $cart->where("user_openid='%s'",$user_openid)->delete();
+        }
+        $goodslist=$ordereach->where("order_id='%s'",$order_id)->select();
+        $is=true;
+        foreach($goodslist as $key=>$val){
+            $data['goods_id']=$val['goods_id'];
+            $data['goods_num']=$val['goods_num'];
+            $data['user_openid']=$user_openid;
+            $is_show=$goods->where('goods_id='.$data['goods_id'])->getField('if_show');
+            if($is_show==1){
+                $cartadd=$cart->add($data);
+                if(!$cartadd){
+                    $is=false;
+                }
+            }
+        }
+        if($is){
+            $arr = array(
+                "code" => "000",
+                "msg" => "成功",
+                "data" => ""
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }else{
+            $arr = array(
+                "code" => "111",
+                "msg" => "失败",
+                "data" => ""
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
+    }
+    public function order_step(){
+        $callback=$_REQUEST['callback'];
+        $order_id=$_REQUEST['order_id'];
+        $order=D('order');
+        $order_step=$order->where("order_id='%s'",$order_id)->getField('order_step');
+        if($order_step==1){
+            $arr = array(
+                "code" => "000",
+                "msg" => "成功",
+                "data" => ""
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }else{
+            $arr = array(
+                "code" => "111",
+                "msg" => "失败",
                 "data" => ""
             );
             echo $callback . "(" . HHJson($arr) . ")";

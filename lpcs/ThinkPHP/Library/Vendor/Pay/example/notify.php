@@ -28,13 +28,13 @@ class PayNotifyCallBack extends WxPayNotify
 		}
 		return false;
 	}
-	
+
 	//重写回调处理函数
 	public function NotifyProcess($data, &$msg)
 	{
 		Log::DEBUG("call back:" . json_encode($data));
 		$notfiyOutput = array();
-		
+
 		if(!array_key_exists("transaction_id", $data)){
 			$msg = "输入参数不正确";
 			return false;
@@ -44,15 +44,36 @@ class PayNotifyCallBack extends WxPayNotify
 			$msg = "订单查询失败";
 			return false;
 		}
-		if($data['return_code']=='SUCCESS'&& $data['result']=='SUCCESS'){
-            $out_trade_no = $data['out_trade_no'];
-            $order=D('order');
-            $map['order_step']=1;
-            $map['wx_orderid']=$data['transaction_id'];
-            $order-> where("order_id='%s'",$out_trade_no)->save($map);
+		if($data["result_code"]=="SUCCESS" && $data["return_code"]=="SUCCESS"){
+            $order_id=$data['out_trade_no'];
+            $wx_orderid=$data['transaction_id'];
+            $order_step=1;
+            $pay_time=date('Y-m-d H:i:s', time());
+            $openid=$data['openid'];
+		    $db_connect=new mysqli('hdm174585329.my3w.com','hdm174585329','cxi2a12c','hdm174585329_db');
+            $sql="select order_step from `lp_order` where `order_id`='$order_id'";
+            $result=$db_connect->query($sql);
+            while ($row = mysqli_fetch_assoc($result))
+            {
+                $step=$row['order_step'];
+            }
+            if($step==0){
+                $updatesql="update `lp_order` set `order_step`='$order_step',`wx_orderid`='$wx_orderid',`pay_time`='$pay_time' where `order_id`='$order_id'";
+                $updatestep=$db_connect->query($updatesql);
+                if($updatestep){
+                    $delsql="delete from `lp_cart` where `user_openid`='$openid'";
+                    $db_connect->query($delsql);
+                }
+            }
         }
 		return true;
 	}
+    public function xmlToArray($xml)
+    {
+        //将XML转为array
+        $array_data = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        return $array_data;
+    }
 }
 
 Log::DEBUG("begin notify");
