@@ -17,8 +17,19 @@ class AddressController extends Controller
         $address=D('address');
         $data['user_openid']=$user_id;
         $data['is_del']=0;
+        $maxdistance=10000;
+        $seller_lat=31.298587;
+        $seller_lng=120.749575;
         $addresslist=$address->where($data)->order('address_id desc')->select();
         if ($addresslist) {
+            foreach($addresslist as $key=>$val){
+                $distance=$this->getDistance($val['receiver_lat'],$val['receiver_lng'],$seller_lat,$seller_lng);
+                if($distance>$maxdistance){
+                    $addresslist[$key]['over']=1;
+                }else{
+                    $addresslist[$key]['over']=0;
+                }
+            }
             $arr = array(
                 "code" => "000",
                 "msg" => "",
@@ -155,5 +166,33 @@ class AddressController extends Controller
             );
             echo $callback . "(" . HHJson($arr) . ")";
         }
+    }
+    public function getDistance($lat1, $lng1, $lat2, $lng2)
+    {
+        $lng1=$this->fd($lng1,-180,180);
+        $lat1=$this->jd($lat1,-74,74);
+        $lng2=$this->fd($lng2,-180,180);
+        $lat2=$this->jd($lat2,-74,74);
+        //返回两点距离，单位米
+        return $this->ce($this->yk($lng1),$this->yk($lng2),$this->yk($lat1),$this->yk($lat2));
+    }
+    private function fd($a, $b, $c) {
+        for(; $a > $c;)
+            $a -= $c - $b;
+        for(; $a < $b;)
+            $a += $c - $b;
+        return $a;
+    }
+    private function jd($a, $b, $c) {
+        $b != null && ($a = max($a, $b));
+        $c != null && ($a = min($a, $c));
+        return $a;
+    }
+    private function yk($a) {
+        return 3.141592653589793 * $a / 180;
+    }
+    private function ce($a, $b, $c, $d) {
+       $dO = 6370996.81;
+       return $dO * acos(sin($c) * sin($d) + cos($c) * cos($d) * cos($b - $a));
     }
 }

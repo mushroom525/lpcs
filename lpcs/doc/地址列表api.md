@@ -37,6 +37,7 @@ data         {
                     address
                     room
                     is_default      是否默认地址
+                    over            是否超出配送范围 1：超出配送范围 0：未超出
               }
 msg          ""
 )

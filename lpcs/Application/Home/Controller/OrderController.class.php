@@ -348,4 +348,23 @@ class OrderController extends Controller
             echo $callback . "(" . HHJson($arr) . ")";
         }
     }
+    public function order_del(){
+        $callback=$_GET['callback'];
+        $order_id=$_GET['order_id'];
+        $order=D('order');
+        $deldefault=$order-> where('order_id='.$order_id)->setField('is_del','1');
+        if($deldefault){
+            $arr = array("code" => "000",
+                "data" => "",
+                "msg" => "成功"
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }else{
+            $arr = array("code" => "111",
+                "data" =>"",
+                "msg" => "失败"
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
+    }
 }
