@@ -141,7 +141,7 @@ var addressEv = {
                         stitching += '<span class="address_name">' + v.name + '</span> ';
                         stitching += '<span class="address_tel">' + v.phone + '</span>';
                         stitching += '</p>';
-                        stitching += '<p class="address_room">' + v.area + ' ' + v.address + '' + v.room + '</p>';
+                        stitching += '<p class="address_room">' + v.address + '' + v.room + '</p>';
                         stitching += '</div>';
                         stitching += '</label>';
                         stitching += '</div>';

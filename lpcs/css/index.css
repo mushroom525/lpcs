@@ -44,6 +44,10 @@ i {
     font-style: normal;
 }
 
+b {
+    font-weight: normal;
+}
+
 /* 清浮动 */
 .clearFix:after {
     content: "";
@@ -95,6 +99,7 @@ i {
 
 .navbar .title span {
     color: white;
+    font-size: 1.6rem;
 }
 
 .navbar .title i {
@@ -1142,6 +1147,7 @@ i {
 
 .orderList_left {
     flex: 6;
+    /*position: relative;*/
 }
 
 .orderList_right {
@@ -1204,6 +1210,8 @@ i {
     resize: none;
     padding: 5px;
     margin-bottom: 5rem;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    -webkit-appearance: none;
 }
 
 .suggestion_Wrap .suggestion_submit {
@@ -1237,7 +1245,7 @@ i {
 
 .order_status {
     width: 100%;
-    height: 10rem;
+    height: 7rem;
     background: url("../img/orderStatus_bg.png") no-repeat;
     background-size: 100% 100%;
 }
@@ -1245,16 +1253,18 @@ i {
 .status_top {
     color: white;
     margin-left: 5rem;
+    padding-top: 1.5rem;
 }
 
 .status_top i {
     width: 2.8rem;
     height: 2.8rem;
-    display: inline-block;
+    /*display: inline-block;*/
     background: url("../img/success_pay.png") no-repeat;
     background-size: 100% 100%;
     vertical-align: middle;
     margin-right: 0.5rem;
+    display: none;
 }
 
 .status_top b {
@@ -1289,7 +1299,8 @@ i {
 }
 
 .order_step {
-    margin-top: 3rem;
+    /*margin-top: 3rem;*/
+    display: none;
 }
 
 .step_img {
@@ -1298,22 +1309,59 @@ i {
 
 .step_content {
     display: flex;
-    padding: 0 1rem;
-    margin-top: 1rem;
+    padding: 0 4rem;
+    /*margin-top: 1rem;*/
 }
 
 .step_time {
     display: flex;
-    padding: 0 1rem;
+    padding: 0 4rem;
     margin-top: 0.5rem;
 }
 
 .step_content span {
-    flex: 3;
+    flex: 2;
+    position: relative;
+    padding-top: 1rem;
+}
+
+.step_content .active {
+    color: #76d7c3;
+}
+
+.step_content span::before {
+    display: inline-block;
+    content: " ";
+    position: absolute;
+    left: 46%;
+    top: -0.7rem;
+    margin-left: -.2rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    border: 0.3rem solid #fff;
+    border-radius: 10rem;
+    box-sizing: border-box;
+    background-color: #999;
+}
+
+.step_content .content1::before {
+    left: 17%;
+}
+
+.step_content .content3::before {
+    left: 75%;
+}
+
+.step_content span.active::before {
+    background-color: #76d7c3;
 }
 
 .step_time span {
-    flex: 3;
+    flex: 2;
+}
+
+.step_time .active {
+    color: #76d7c3;
 }
 
 .step_content .content2 {
@@ -1363,9 +1411,56 @@ i {
 }
 
 .order_remark {
-    margin-bottom: 5rem;
+    margin-bottom: 10rem;
 }
 
 .order_remark p {
     padding: 1.5rem;
+}
+
+#order_detail {
+    width: 100%;
+    min-height: 50px;
+    line-height: 50px;
+    display: flex;
+    display: none;
+}
+
+#order_again {
+    width: 100%;
+    min-height: 50px;
+    line-height: 50px;
+    display: none;
+}
+
+#order_again div {
+    background: #76d7c3;
+    color: white;
+    text-align: center;
+}
+
+#order_detail div {
+    flex: 5;
+    text-align: center;
+}
+
+#order_detail .cancel_order {
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+#order_detail .detail_pay {
+    background: #76d7c3;
+    color: white;
+}
+
+.detail_phone {
+    width: 7.1rem;
+    height: 7.1rem;
+    display: inline-block;
+    background: url("../img/detail_phone.png") no-repeat right;
+    transform: scale(0.45);
+    margin-top: -2.5%;
+    /*margin-left: -5px;*/
+    flex: 3;
 }
