@@ -31,8 +31,19 @@ callback            回调
 callback(
 code         000
 data         {
-                    distance     配送距离(单位：米)
-                    fee          运费(单位：元)
+                    status { 
+                                 quantity         购物车总商品数量
+                                 amount           购物车总金额
+                            }
+                    carts   {
+                                 goods_id         商品id
+                                 goods_name       商品名称
+                                 price            销售价
+                                 discount_price   折扣价
+                                 unit             单位
+                                 goods_num        商品数量
+                            }
+                    fee                           运费(单位：元)
              }
 msg          ""
 )
