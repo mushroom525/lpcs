@@ -91,34 +91,35 @@ class OrderController extends Controller
         $user_openid=$_REQUEST['openid'];
         $order=D('order');
         $suggest=D('suggestion');
-        $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id and o.user_openid='%s'",$user_openid)->select();
-        foreach($orderlist as $key=>$val){
-            switch ($val['order_step']){
-                case 0: $order_step_ch='待支付';break;
-                case 1: $order_step_ch='待商户接单';break;
-                case 2: $order_step_ch='待配送';break;
-                case 3: $order_step_ch='已完成';break;
-                case 4: $order_step_ch='已取消';break;
-            }
-            $orderlist[$key]['order_step_ch']=$order_step_ch;
-            $map['user_openid']=$user_openid;
-            $map['order_id']=$val['order_id'];
-            $issuggest=$suggest->where($map)->find();
-            if($issuggest){
-                $is=1;
-            }else{
-                $is=0;
-            }
-            $orderlist[$key]['is_suggest']=$is;
-        }
+        $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id and o.user_openid='%s'",$user_openid)->order('id desc')->select();
         if($orderlist){
+            foreach($orderlist as $key=>$val){
+                switch ($val['order_step']){
+                    case 0: $order_step_ch='待支付';break;
+                    case 1: $order_step_ch='待商户接单';break;
+                    case 2: $order_step_ch='待配送';break;
+                    case 3: $order_step_ch='已完成';break;
+                    case 4: $order_step_ch='已取消';break;
+                }
+                $orderlist[$key]['order_step_ch']=$order_step_ch;
+                $map['user_openid']=$user_openid;
+                $map['order_id']=$val['order_id'];
+                $issuggest=$suggest->where($map)->find();
+                if($issuggest){
+                    $is=1;
+                }else{
+                    $is=0;
+                }
+                $orderlist[$key]['is_suggest']=$is;
+            }
             $arr = array(
                 "code" => "000",
                 "msg" => "查询成功",
                 "data" => $orderlist
             );
             echo $callback . "(" . HHJson($arr) . ")";
-        }else{
+        }
+       else{
             $arr = array(
                 "code" => "111",
                 "msg" => "查询失败",
