@@ -11,6 +11,48 @@ use Think\Controller;
 
 class AddressController extends Controller
 {
+    public function notover(){
+        $callback=$_GET['callback'];
+        $user_id=$_GET['openid'];
+        $maxdistance=10000;
+        $seller_lat=31.298587;
+        $seller_lng=120.749575;
+        $data['user_openid']=$user_id;
+        $data['is_del']=0;
+        $addresslist=array();
+        $address=D('address');
+        $alllist=$address->where($data)->order('address_id desc')->select();
+        if($alllist){
+            foreach($alllist as $key=>$val){
+                $distance=$this->getDistance($val['receiver_lat'],$val['receiver_lng'],$seller_lat,$seller_lng);
+                if($distance>$maxdistance){
+                    $addresslist=$alllist[$key];
+                }
+            }
+            if($addresslist){
+                $arr = array(
+                    "code" => "000",
+                    "data" => $addresslist,
+                    "msg" => "成功"
+                );
+                echo $callback . "(" . HHJson($arr) . ")";
+            }else{
+                $arr = array(
+                    "code" => "111",
+                    "data" => "",
+                    "msg" => "信息不存在"
+                );
+                echo $callback . "(" . HHJson($arr) . ")";
+            }
+        }else{
+            $arr = array(
+                "code" => "112",
+                "data" => "",
+                "msg" => "未添加地址"
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
+    }
     public function index(){
         $callback=$_GET['callback'];
         $user_id=$_GET['openid'];
