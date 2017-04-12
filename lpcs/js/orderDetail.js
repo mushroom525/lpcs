@@ -20,6 +20,7 @@ var MSG5 = '订单已完成！';
 var MSG6 = '待支付！';
 var MSG7 = '<span></span>后订单将自动取消';
 var MSG8 = '订单已取消！';
+var MSG9 = '订单正在配送中，请耐心等待...';
 
 var orderDetailEv = {
     init: function () {
@@ -224,6 +225,12 @@ var orderDetailEv = {
                         });
                     } else if (data.data.order_step == '4') {//4：已取消
                         $('.status_top b').html(MSG8);
+                        $('#order_again').show();
+                        $('#order_again').click(function () {//再来一单
+                            orderDetailEv.againOrder(orderDetailId);
+                        });
+                    } else if (data.data.order_step == '5') {//5：配送中
+                        $('.status_top b').html(MSG9);
                         $('#order_again').show();
                         $('#order_again').click(function () {//再来一单
                             orderDetailEv.againOrder(orderDetailId);

@@ -1576,3 +1576,32 @@ b {
 .address_detailOver span, .address_detailOver p {
     color: #999;
 }
+
+.mer {
+    display: flex;
+}
+
+.mer span {
+    flex: 5;
+}
+
+.mer #order_time {
+    text-align: right;
+    padding-right: 4%;
+}
+
+.order_info .order_address {
+    margin-top: 0;
+}
+
+#mer_order {
+    width: 100%;
+    min-height: 50px;
+    line-height: 50px;
+}
+
+#mer_order div {
+    background: #76d7c3;
+    color: white;
+    text-align: center;
+}

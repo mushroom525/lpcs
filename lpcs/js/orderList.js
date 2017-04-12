@@ -7,6 +7,7 @@ var OPENIDURL = BASEURL + 'index/index'; // openid
 var SUGGESTIONURL = BASEURL + 'suggestion/add'; // 意见反馈
 var AGAINORDERURL = BASEURL + 'order/orderagain'; // 再来一单
 var ORDERCANCELURL = BASEURL + 'order/ordercancel'; // 取消订单
+var ORDERDELURL = BASEURL + 'order/order_del'; // 删除订单
 var ORDERPAYURL = BASEURL + 'order/order_continue'; // 付款
 var ORDERSTEPURL = BASEURL + 'order/order_step'; // 判断是否支付成功
 
@@ -23,7 +24,7 @@ var orderEv = {
         self.againOrder();
         self.goBackEvent();//意见反馈中的返回
         // self.countdownEvent();
-        self.aa();
+        self.swiperDel();
     },
     /**
      * 返回上一页
@@ -121,6 +122,8 @@ var orderEv = {
                             } else {
                                 stitching += '<a class="order again" href="javascript:;">再来一单</a>';
                             }
+                        } else if (v.order_step == '5') {//配送中
+                            stitching += '<a class="order again" href="javascript:;">再来一单</a>';
                         }
                         stitching += '</div>';
                         stitching += '</div>';
@@ -281,40 +284,72 @@ var orderEv = {
      */
     delOrder: function () {
         var block_height = parseInt($('.orderList').outerHeight());
-        $('.del_btn').css('line-height', block_height + 'px');
+        var $delBtn = $('.del_btn');
+        $delBtn.css('line-height', block_height + 'px');
+        $delBtn.click(function () {
+            var orderid = $(this).parent().attr('order_id');
+            $.ajax({
+                url: ORDERDELURL,
+                type: "GET",
+                async: true,
+                data: {
+                    order_id: orderid
+                },
+                dataType: 'jsonp',
+                success: function (data) {
+                    if (data.code == '000') {
+                        location.reload();
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                },
+                error: function (data) {
+                }
+            });
+        })
     },
-    aa: function () {
+    /**
+     * 左滑出现删除按钮
+     */
+    swiperDel: function () {
         function ad(target) {
             var obj = target && target.parentNode;
             return obj && (obj.className == 'orderList' ? obj : ad(obj));
         }
 
-        var initX;//触摸位置
-        var moveX;//滑动时的位置
-        var X = 0;//移动距离
-        var objX = 0;//目标对象位置
+        var initX; //触摸位置X
+        var initY; //触摸位置Y
+        var moveX; //滑动时的位置X
+        var moveY; //滑动时的位置Y
+        var X = 0; //移动距离X
+        var Y = 0; //移动距离Y
+        var flagX = 0; //是否是左右滑动 0为初始，1为左右，2为上下，在move中设置，在end中归零
+        var objX = 0; //目标对象位置
+
         window.addEventListener('touchstart', function (event) {
             // event.preventDefault();
             // var obj = event.target.parentNode;
             var obj = ad(event.target);
             if (obj) {
-                $('.orderList').css('WebkitTransform', 'translateX(0px)');
+                // $('.orderList').css('WebkitTransform', 'translateX(0px)');
                 // .style.WebkitTransform = "translateX(" + 0 + "px)";
                 initX = event.targetTouches[0].pageX;
+                initY = event.targetTouches[0].pageY;
                 objX = (obj.style.WebkitTransform.replace(/translateX\(/g, "").replace(/px\)/g, "")) * 1;
             }
             if (objX == 0) {
                 window.addEventListener('touchmove', function (event) {
-                    // if(obj.style.WebkitTransform)
-                    // event.preventDefault();
-                    // var ssss = ad(event.target);
-                    // var obj = event.target.parentNode;
+                    // 判断滑动方向，X轴阻止默认事件，Y轴跳出使用浏览器默认
+                    if (flagX == 0) {
+                        setScrollX(event);
+                        return;
+                    } else if (flagX == 1) {
+                        event.preventDefault();
+                    } else {
+                        return;
+                    }
                     var obj = ad(event.target);
                     if (obj) {
-                        // var objX1 = (obj.style.WebkitTransform.replace(/translateX\(/g, "").replace(/px\)/g, "")) * 1;
-                        // if (objX1 < 0) {
-                        //     event.preventDefault();
-                        // }
                         moveX = event.targetTouches[0].pageX;
                         X = moveX - initX;
                         if (X > 0) {
@@ -322,8 +357,8 @@ var orderEv = {
                         } else if (X < 0) {
                             var l = Math.abs(X);
                             obj.style.WebkitTransform = "translateX(" + -l + "px)";
-                            if (l > 80) {
-                                l = 80;
+                            if (l > 60) {
+                                l = 60;
                                 obj.style.WebkitTransform = "translateX(" + -l + "px)";
                             }
                         }
@@ -331,45 +366,64 @@ var orderEv = {
                 });
             } else if (objX < 0) {
                 window.addEventListener('touchmove', function (event) {
-                    event.preventDefault();
+                    // 判断滑动方向，X轴阻止默认事件，Y轴跳出使用浏览器默认
+                    if (flagX == 0) {
+                        setScrollX(event);
+                        return;
+                    } else if (flagX == 1) {
+                        event.preventDefault();
+                    } else {
+                        return;
+                    }
                     // var obj = event.target.parentNode;
                     var obj = ad(event.target);
                     if (obj) {
                         moveX = event.targetTouches[0].pageX;
                         X = moveX - initX;
                         if (X > 0) {
-                            var r = -80 + Math.abs(X);
+                            var r = -60 + Math.abs(X);
                             obj.style.WebkitTransform = "translateX(" + r + "px)";
                             if (r > 0) {
                                 r = 0;
                                 obj.style.WebkitTransform = "translateX(" + r + "px)";
                             }
                         } else { //向左滑动
-                            obj.style.WebkitTransform = "translateX(" + -80 + "px)";
+                            obj.style.WebkitTransform = "translateX(" + -60 + "px)";
                         }
                     }
                 });
             }
-
         });
         window.addEventListener('touchend', function (event) {
-            // event.preventDefault();
-            // var obj = event.target.parentNode;
             var obj = ad(event.target);
             if (obj) {
                 objX = (obj.style.WebkitTransform.replace(/translateX\(/g, "").replace(/px\)/g, "")) * 1;
-                if (objX > -40) {
+                if (objX > -30) {
                     obj.style.WebkitTransform = "translateX(" + 0 + "px)";
                 } else {
-                    obj.style.WebkitTransform = "translateX(" + -80 + "px)";
+                    obj.style.WebkitTransform = "translateX(" + -60 + "px)";
                 }
             }
-        })
+            flagX = 0;
+        });
+        //设置滑动方向
+        function setScrollX(event) {
+            moveX = event.targetTouches[0].pageX;
+            moveY = event.targetTouches[0].pageY;
+            X = moveX - initX;
+            Y = moveY - initY;
 
+            if (Math.abs(X) > Math.abs(Y)) {
+                flagX = 1;
+            } else {
+                flagX = 2;
+            }
+            return flagX;
+        }
     }
-
-
 };
+
+
 /**
  * 微信支付
  */
