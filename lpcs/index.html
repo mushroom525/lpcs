@@ -51,35 +51,35 @@
         <!--<ul>-->
         <div id="detail_wrap" class="detail_wrap">
             <!--<div class="content_li">-->
-                <!--<ul>-->
-                    <!--<li data-id="1">-->
-                        <!--<div class="left_img">-->
-                            <!--&lt;!&ndash;<div class="img_wrap">&ndash;&gt;-->
-                            <!--<img src="img/img.png">-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--</div>-->
-                        <!--<div class="left_describe">-->
-                            <!--<header>特惠供应</header>-->
-                            <!--<p>月销49笔</p>-->
-                            <!--<strong>￥<i>17</i>/<b>个</b></strong>-->
-                        <!--</div>-->
-                        <!--<div class="right_add">-->
-                            <!--<a class="reduce fl" href="javascript:;">-->
-                                <!--<img src="img/reduce.png">-->
-                            <!--</a>-->
-                            <!--<span class="num fl">0</span>-->
-                            <!--<a class="plus fr" href="javascript:;">-->
-                                <!--<img src="img/plus.png">-->
-                            <!--</a>-->
-                        <!--</div>-->
-                    <!--</li>-->
-                <!--</ul>-->
+            <!--<ul>-->
+            <!--<li data-id="1">-->
+            <!--<div class="left_img">-->
+            <!--&lt;!&ndash;<div class="img_wrap">&ndash;&gt;-->
+            <!--<img src="img/img.png">-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--</div>-->
+            <!--<div class="left_describe">-->
+            <!--<header>特惠供应</header>-->
+            <!--<p>月销49笔</p>-->
+            <!--<strong>￥<i>17</i>/<b>个</b></strong>-->
+            <!--</div>-->
+            <!--<div class="right_add">-->
+            <!--<a class="reduce fl" href="javascript:;">-->
+            <!--<img src="img/reduce.png">-->
+            <!--</a>-->
+            <!--<span class="num fl">0</span>-->
+            <!--<a class="plus fr" href="javascript:;">-->
+            <!--<img src="img/plus.png">-->
+            <!--</a>-->
+            <!--</div>-->
+            <!--</li>-->
+            <!--</ul>-->
             <!--</div>-->
         </div>
     </div>
-    <div id="wrap" class="wrap"></div>
-    <nav id="navbar" class="navbar navbar-fixed-bottom">
 
+    <section id="navbar" class="navbar navbar-fixed-bottom">
+        <div id="wrap" class="wrap display"></div>
         <div id="gec_detail" class="container gec_detail">
             <div class="gwcDetail_top">
                 <div class="top_left">
@@ -122,31 +122,31 @@
                 <a href="javascript:;">还差￥<i>30</i>元起送</a>
             </div>
         </div>
-    </nav>
+    </section>
 </div>
 
 
 </body>
 </html>
 <script src="js/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="lib/layui/lay/modules/layer.js" ></script>
+<script type="text/javascript" src="lib/layui/lay/modules/layer.js"></script>
 <script src="js/scrollfix.js"></script>
 <script src="js/jquery.fly.min.js"></script>
 <script src="js/api.js"></script>
 <script src="js/swiper-3.4.2.min.js"></script>
 <script src="js/index.js"></script>
-<script type="text/javascript" charset="utf-8">
-    var ScrollFix = function (elem) {
-        var startY, startTopScroll;
-        elem.addEventListener('touchstart', function (event) {
-            startY = event.touches[0].pageY;
-            startTopScroll = elem.scrollTop;
-            //当滚动条在最顶部的时候
-            if (startTopScroll <= 0)
-                elem.scrollTop = 1;
-            //当滚动条在最底部的时候
-            if (startTopScroll + elem.offsetHeight >= elem.scrollHeight)
-                elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
-        }, false);
-    };
-</script>
+<!--<script type="text/javascript" charset="utf-8">-->
+<!--var ScrollFix = function (elem) {-->
+<!--var startY, startTopScroll;-->
+<!--elem.addEventListener('touchstart', function (event) {-->
+<!--startY = event.touches[0].pageY;-->
+<!--startTopScroll = elem.scrollTop;-->
+<!--//当滚动条在最顶部的时候-->
+<!--if (startTopScroll <= 0)-->
+<!--elem.scrollTop = 1;-->
+<!--//当滚动条在最底部的时候-->
+<!--if (startTopScroll + elem.offsetHeight >= elem.scrollHeight)-->
+<!--elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;-->
+<!--}, false);-->
+<!--};-->
+<!--</script>-->

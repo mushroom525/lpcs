@@ -100,9 +100,13 @@ var addressEv = {
             if (valObj.poiname != null && valObj.poiname != "") {
                 if (valObj.poiname == '我的位置') {
                     $('.Jtxmap').html(valObj.poiaddress);
+                    $('.Jtxmap').attr('lat', valObj.latlng.lat);//维度
+                    $('.Jtxmap').attr('lng', valObj.latlng.lng);//经度
                     $('.Jaddress').val(valObj.cityname + valObj.poiaddress);
                 } else {
                     $('.Jtxmap').html(valObj.poiname);
+                    $('.Jtxmap').attr('lat', valObj.latlng.lat);//维度
+                    $('.Jtxmap').attr('lng', valObj.latlng.lng);//经度
                     $('.Jaddress').val(valObj.poiaddress);
                 }
             }
@@ -154,14 +158,20 @@ var addressEv = {
                         if (valObj.poiname != null && valObj.poiname != "") {
                             if (valObj.poiname == '我的位置') {
                                 $('.Jtxmap').html(valObj.poiaddress);
+                                $('.Jtxmap').attr('lat', valObj.latlng.lat);//维度
+                                $('.Jtxmap').attr('lng', valObj.latlng.lng);//经度
                                 $('.Jaddress').val(valObj.cityname + valObj.poiaddress);
                             } else {
                                 $('.Jtxmap').html(valObj.poiname);
+                                $('.Jtxmap').attr('lat', valObj.latlng.lat);//维度
+                                $('.Jtxmap').attr('lng', valObj.latlng.lng);//经度
                                 $('.Jaddress').val(valObj.poiaddress);
                             }
                         }
                     } else {
                         $('.area').html(data.data.area);
+                        $('.area').attr('lat', data.data.receiver_lat);//维度
+                        $('.area').attr('lng', data.data.receiver_lng);//经度
                         $('.address_input').val(data.data.address);
                     }
                     $('.room_input').val(data.data.room);
@@ -190,6 +200,8 @@ var addressEv = {
             var $name = $('.enter_name').val();//姓名
             var $tel = $('.contact_tel').val();//电话
             var $area = $('.area').html();//小区/大厦/学校
+            var $lat = $('.area').attr('lat');//小区/大厦/学校纬度
+            var $lng = $('.area').attr('lng');//小区/大厦/学校经度
             var $address_input = $('.address_input').val();//详细地址
             var $room_input = $('.room_input').val();//门牌号
             if ($name == '' || $name == null) {
@@ -223,7 +235,9 @@ var addressEv = {
                         phone: $tel,
                         area: $area,
                         address: $address_input,
-                        room: $room_input
+                        room: $room_input,
+                        receiver_lat: $lat,
+                        receiver_lng: $lng
                     },
                     dataType: 'jsonp',
                     success: function (data) {
@@ -248,6 +262,8 @@ var addressEv = {
             var $name = $('.enter_name').val();//姓名
             var $tel = $('.contact_tel').val();//电话
             var $area = $('.area').html();//小区/大厦/学校
+            var $lat = $('.area').attr('lat');//小区/大厦/学校纬度
+            var $lng = $('.area').attr('lng');//小区/大厦/学校经度
             var $address_input = $('.address_input').val();//详细地址
             var $room_input = $('.room_input').val();//门牌号
             if ($name == '' || $name == null) {
@@ -280,7 +296,9 @@ var addressEv = {
                         phone: $tel,
                         area: $area,
                         address: $address_input,
-                        room: $room_input
+                        room: $room_input,
+                        receiver_lat: $lat,
+                        receiver_lng: $lng
                     },
                     dataType: 'jsonp',
                     success: function (data) {

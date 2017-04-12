@@ -200,6 +200,7 @@ b {
     margin: 0 auto;
     position: fixed;
     margin-left: 3%;
+    z-index: 1;
 }
 
 .right_content ul {
@@ -225,6 +226,7 @@ b {
     border-bottom: 1px solid #ebebeb;
     padding: 2rem 0;
     display: flex;
+    position: relative;
 }
 
 #time .right_content ul li {
@@ -503,11 +505,14 @@ b {
     width: 95%;
     margin: 0 auto;
     overflow: auto;
+    max-height: 20rem;
+    -webkit-overflow-scrolling: touch;
 }
 
 .gwcDetail_content ul {
     max-height: 20rem;
     overflow: auto;
+    margin: 1rem 0;
 }
 
 .gwcDetail_content li {
@@ -546,17 +551,24 @@ b {
 }
 
 .wrap {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: #000;
-    opacity: .4;
-    -webkit-transition: opacity .35s ease;
-    transition: opacity .35s ease;
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*right: 0;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
+    /*background-color: #000;*/
+    /*opacity: .4;*/
+    /*-webkit-transition: opacity .35s ease;*/
+    /*transition: opacity .35s ease;*/
+    /*display: none;*/
+    /*z-index: 1100;*/
+    background: rgba(0, 0, 0, 0.5);
+    display: block;
+    height: 100vh;
+}
+
+.display {
     display: none;
-    z-index: 1100;
 }
 
 .icon {
@@ -1135,18 +1147,24 @@ b {
 }
 
 .orderList {
-    display: flex;
-    padding-bottom: 4%;
-    margin: 4% 4% 0 4%;
+    padding: 4% 0;
+    margin: 0 4%;
     border-bottom: 1px solid #e5e5e5;
+    position: relative;
+    -webkit-transform: translateX(0px)
+}
+
+.orderListWrap {
+    display: flex;
 }
 
 .orderList:first-child {
-    margin-top: 7rem;
+    margin-top: 5rem;
 }
 
 .orderList_left {
     flex: 6;
+    cursor: pointer;
     /*position: relative;*/
 }
 
@@ -1168,6 +1186,17 @@ b {
 .orderList_right p {
     margin-top: 10px;
     text-align: right;
+    color: #76d7c3;
+}
+
+.orderList_right span {
+    margin-top: 10px;
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+}
+
+.orderList_right span i {
     color: #76d7c3;
 }
 
@@ -1463,4 +1492,87 @@ b {
     margin-top: -2.5%;
     /*margin-left: -5px;*/
     flex: 3;
+}
+
+.del_btn {
+    position: absolute;
+    top: 0;
+    right: -80px;
+    text-align: center;
+    background: #76d7c3;
+    color: #fff;
+    width: 60px;
+    height: 100%;
+}
+
+#order_container .orderList_wrap {
+    overflow-x: hidden;
+}
+
+.overAddressWrap .contact_nameWrap {
+    margin-top: 0;
+}
+
+.overAddress .address_wrap {
+    margin-top: 0;
+}
+
+.rangeAddress .address_wrap:last-child {
+    border-bottom: none;
+}
+
+.overAddress .address_wrap:last-child {
+    border-bottom: none;
+}
+
+.overAddress .address_detailOver em {
+    opacity: 0;
+}
+
+.address_detailOver {
+    flex: 9;
+    position: relative;
+}
+
+.address_detailOver em {
+    width: 1.8rem;
+    height: 1.8rem;
+    display: inline-block;
+    background: url("../img/not_choose.png") no-repeat;
+    background-size: 100% 100%;
+    margin-top: 4%;
+    margin-right: 5%;
+}
+
+.address_detailOver .choose {
+    background: url("../img/choose.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+.address_detailOver label {
+    font-weight: normal;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.address_detailOver input {
+    position: absolute;
+    top: 10px;
+    left: 3px;
+    opacity: 0;
+}
+
+.address_detailOver i {
+    display: inline-block;
+    width: 1.7rem;
+    height: 2.2rem;
+    background: url("../img/address.png") no-repeat;
+    background-size: 100% 100%;
+    margin-top: 4%;
+    margin-right: 5%;
+    margin-left: 2%;
+}
+
+.address_detailOver span, .address_detailOver p {
+    color: #999;
 }

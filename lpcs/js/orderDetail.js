@@ -10,7 +10,7 @@ var AGAINORDERURL = BASEURL + 'order/orderagain'; // 再来一单
 
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
 
-var openid = sessionStorage.getItem('openid');//sessionStorage.getItem('openid')
+var openid = 'o-X7mw822W0t7e9u7gqwkrxsb3-I';//sessionStorage.getItem('openid')
 
 var MSG1 = '支付成功！';
 var MSG2 = '等待商家接单...';
@@ -18,7 +18,7 @@ var MSG3 = '已接单！';
 var MSG4 = '等待商家配送...';
 var MSG5 = '订单已完成！';
 var MSG6 = '待支付！';
-var MSG7 = '<span>15分钟</span>后订单将自动取消';
+var MSG7 = '<span></span>后订单将自动取消';
 var MSG8 = '订单已取消！';
 
 var orderDetailEv = {
@@ -39,8 +39,13 @@ var orderDetailEv = {
     /**
      * 倒计时
      */
-    countdownEvent: function (orderDetailId) {
-        var intDiff = parseInt(900); //倒计时总秒数量
+    countdownEvent: function (orderDetailId, orderTime) {
+        var myDate = new Date();
+        var dateArr = orderTime.split(' ')[0].split('-');
+        var timeArr = orderTime.split(' ')[1].split(':');
+        var orderTimeDate = new Date(dateArr[0], dateArr[1] - 1, dateArr[2], timeArr[0], timeArr[1], timeArr[2]);//转换成date类型
+        var time_difference = myDate.getTime() - orderTimeDate.getTime();//现在时间毫秒值-下单时间毫秒值
+        var intDiff = parseInt(900 - time_difference / 1000); //倒计时总秒数量
         function timer(intDiff) {
             window.setInterval(function () {
                 var day = 0,
@@ -53,7 +58,7 @@ var orderDetailEv = {
                     minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
                     second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
                 } else {
-                    // orderDetailEv.cancelOrder(orderDetailId);
+                    orderDetailEv.cancelOrder(orderDetailId);
                 }
                 if (minute <= 9) minute = '0' + minute;
                 if (second <= 9) second = '0' + second;
@@ -173,7 +178,7 @@ var orderDetailEv = {
                         $('.status_top b').html(MSG6);
                         $('.status_top span').html(MSG7);
                         $('#order_detail').css('display', 'flex');
-                        orderDetailEv.countdownEvent(orderDetailId);
+                        orderDetailEv.countdownEvent(orderDetailId, data.data.order_time);
                         $('.order_step').show();
                         $('.step_content .content1').html('待支付').removeClass('active');
                         $('.step_content .content2').html('待接单').removeClass('active');
@@ -188,16 +193,12 @@ var orderDetailEv = {
                         $('.status_top i').css('display', 'inline-block');
                         $('.status_top b').html(MSG1);
                         $('.status_top span').html(MSG2);
-                        $('#order_detail').css('display', 'flex');
-                        $('.detail_pay').html('再来一单');
+                        $('#order_again').show();
                         $('.order_step').show();
                         $('.step_content .content1').html('已支付').addClass('active');
                         $('.step_content .content2').html('待接单').removeClass('active');
                         $('.step_content .content3').html('待送达').removeClass('active');
-                        $('.cancel_order').click(function () {//取消订单
-                            orderDetailEv.cancelOrder(orderDetailId);
-                        });
-                        $('.detail_pay').click(function () {//再来一单
+                        $('#order_again').click(function () {//再来一单
                             orderDetailEv.againOrder(orderDetailId);
                         });
                     } else if (data.data.order_step == '2') {//2：待配送

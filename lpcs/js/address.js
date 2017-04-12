@@ -128,41 +128,79 @@ var addressEv = {
             success: function (data) {
                 console.log(data.data);
                 if (data.code == '000') {
-                    var $content = $('.addressWrap');
+                    var $content = $('.rangeAddress');
+                    var $content1 = $('.overAddress');
                     $.each(data.data, function (i, v) {
-                        var stitching = '<div class="address_wrap">';
-                        stitching += '<div id="address_top">';
-                        stitching += '<div class="address_detail clearfix">';
-                        stitching += '<label data-id="' + v.address_id + '">';
-                        stitching += '<em class="fl"></em>';
-                        stitching += '<input class="fl" title="" type="radio" name="address">';
-                        stitching += '<div class="address fl">';
-                        stitching += '<p>';
-                        stitching += '<span class="address_name">' + v.name + '</span> ';
-                        stitching += '<span class="address_tel">' + v.phone + '</span>';
-                        stitching += '</p>';
-                        stitching += '<p class="address_room">' + v.address + '' + v.room + '</p>';
-                        stitching += '</div>';
-                        stitching += '</label>';
-                        stitching += '</div>';
-                        stitching += '<div data-type="edit" class="manage_address">';
-                        stitching += '<em></em>';
-                        stitching += '</div>';
-                        stitching += '</div>';
-                        stitching += '<p class="address_default">';
-                        if (v.is_default == '0') {
-                            stitching += '<label class="clearFix">';
+                        if (v.over == '0') {
+                            var stitching = '<div class="address_wrap">';
+                            stitching += '<div id="address_top">';
+                            stitching += '<div class="address_detail clearfix">';
+                            stitching += '<label data-id="' + v.address_id + '">';
                             stitching += '<em class="fl"></em>';
-                            stitching += '<input class="fl" title="" type="radio" name="default">';
-                            stitching += '<span>设为默认地址</span>';
+                            stitching += '<input class="fl" title="" type="radio" name="address">';
+                            stitching += '<div class="address fl">';
+                            stitching += '<p>';
+                            stitching += '<span class="address_name">' + v.name + '</span> ';
+                            stitching += '<span class="address_tel">' + v.phone + '</span>';
+                            stitching += '</p>';
+                            stitching += '<p class="address_room">' + v.address + '' + v.room + '</p>';
+                            stitching += '</div>';
+                            stitching += '</label>';
+                            stitching += '</div>';
+                            stitching += '<div data-type="edit" class="manage_address">';
+                            stitching += '<em></em>';
+                            stitching += '</div>';
+                            stitching += '</div>';
+                            // stitching += '<p class="address_default">';
+                            // if (v.is_default == '0') {
+                            //     stitching += '<label class="clearFix">';
+                            //     stitching += '<em class="fl"></em>';
+                            //     stitching += '<input class="fl" title="" type="radio" name="default">';
+                            //     stitching += '<span>设为默认地址</span>';
+                            // } else {
+                            //     stitching += '<label class="active_label">';
+                            //     stitching += '<em class="fl default_choose"></em>默认地址';
+                            // }
+                            // stitching += '</label>';
+                            // stitching += '</p>';
+                            stitching += '</div>';
+                            $content.append(stitching);
                         } else {
-                            stitching += '<label class="active_label">';
-                            stitching += '<em class="fl default_choose"></em>默认地址';
+                            var stitching1 = '<div class="address_wrap">';
+                            stitching1 += '<div id="address_top">';
+                            stitching1 += '<div class="address_detailOver clearfix">';
+                            stitching1 += '<label data-id="' + v.address_id + '">';
+                            stitching1 += '<em class="fl"></em>';
+                            stitching1 += '<input class="fl" title="" type="radio" name="address">';
+                            stitching1 += '<div class="address fl">';
+                            stitching1 += '<p>';
+                            stitching1 += '<span class="address_name">' + v.name + '</span> ';
+                            stitching1 += '<span class="address_tel">' + v.phone + '</span>';
+                            stitching1 += '</p>';
+                            stitching1 += '<p class="address_room">' + v.address + '' + v.room + '</p>';
+                            stitching1 += '</div>';
+                            stitching1 += '</label>';
+                            stitching1 += '</div>';
+                            stitching1 += '<div data-type="edit" class="manage_address">';
+                            stitching1 += '<em></em>';
+                            stitching1 += '</div>';
+                            stitching1 += '</div>';
+                            // stitching1 += '<p class="address_default">';
+                            // if (v.is_default == '0') {
+                            //     stitching1 += '<label class="clearFix">';
+                            //     stitching1 += '<em class="fl"></em>';
+                            //     stitching1 += '<input class="fl" title="" type="radio" name="default">';
+                            //     stitching1 += '<span>设为默认地址</span>';
+                            // } else {
+                            //     stitching1 += '<label class="active_label">';
+                            //     stitching1 += '<em class="fl default_choose"></em>默认地址';
+                            // }
+                            // stitching1 += '</label>';
+                            // stitching1 += '</p>';
+                            stitching1 += '</div>';
+                            $content1.append(stitching1);
                         }
-                        stitching += '</label>';
-                        stitching += '</p>';
-                        stitching += '</div>';
-                        $content.append(stitching);
+
                     });
                     /* 默认高亮 */
                     var addressId = sessionStorage.getItem('addressId');
