@@ -174,7 +174,11 @@ var orderDetailEv = {
                     $('.order_time .list_right').html(data.data.order_time);//订单时间
                     $('.goods_num .list_right').html(data.data.goods_num);//商品数量
                     $('.send_address .list_right').html(data.data.address + data.data.room);//配送地址
-                    $('#remark').html(data.data.remark);//备注
+                    if (data.data.remark) {
+                        $('#remark').html(data.data.remark);//备注
+                    } else {
+                        $('#remark').html('无');//备注
+                    }
                     if (data.data.order_step == '0') {//0:待支付
                         $('.status_top b').html(MSG6);
                         $('.status_top span').html(MSG7);

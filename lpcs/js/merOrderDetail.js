@@ -41,6 +41,27 @@ var orderDetailEv = {
             success: function (data) {
                 if (data.code == '000') {
                     console.log(data.data);
+                    $.each(data.data.goods, function (i, v) {
+                        var shopStr = '<li>';
+                        shopStr += '<span class="v_name">' + v.goods_name + '</span>';
+                        shopStr += '<span class="v_num">x ' + v.goods_num + '</span>';
+                        shopStr += '<span class="v_price">￥' + v.discount_price + '</span>';
+                        shopStr += '</li>';
+                        $shopcontent.append(shopStr);
+                    });
+                    $('#order_num i').html(data.data.order_id);//订单号
+                    $('#psf i').html(data.data.distribution_cost);//配送费
+                    $('#total i').html(data.data.total_amount);//总价
+                    $('.address_name').html(data.data.name);//配送人姓名
+                    $('.address_tel').html(data.data.phone);//配送人电话
+                    $('.address_room').html(data.data.address + data.data.room);//配送人地址
+                    $('.time_right span').html(data.data.appointment_time);//预约时间
+                    $('#order_time b').html(data.data.order_time);//下单时间
+                    if (data.data.remark) {
+                        $('#remark').html(data.data.remark);//备注
+                    } else {
+                        $('#remark').html('无');//备注
+                    }
                 } else {
                     layer.msg(data.msg);
                 }
