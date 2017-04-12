@@ -2,10 +2,12 @@
  * Created by Administrator on 2017/3/30.
  */
 var BASEURL = 'http://www.heeyhome.com/lpcs/home/';
-var ADDRESSLISTURL = BASEURL + 'address/index'; // 地址列表
-var GWCINFOURL = BASEURL + 'cart/index'; // 获取默认购物车内容
+// var ADDRESSLISTURL = BASEURL + 'address/index'; // 地址列表
+var RANGEADDRESSURL = BASEURL + 'address/notover'; // 获取没有超出配送范围的地址
+// var GWCINFOURL = BASEURL + 'cart/index'; // 获取默认购物车内容
 var CONFIRMPAYURL = BASEURL + 'order/orderproduce'; // 确认付款
 var ORDERSTEPURL = BASEURL + 'order/order_step'; // 判断是否支付成功
+var FEEURL = BASEURL + 'dada/queryDeliverFee'; // 获取默认购物车内容+配送费
 
 
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
@@ -19,7 +21,7 @@ var addressEv = {
         self.goBackEvent();
         self.chooseAddressEvent();
         self.saveAddressEvent();
-        self.gwcContentInit();
+        // self.gwcContentInit();
         self.selectTimeEvent(); //选择送达时间
         self.clickSelectTimeEvent(); //选择送达时间
         self.confirmPay(); //确认付款
@@ -106,15 +108,16 @@ var addressEv = {
     /**
      * 购物车内容初始化
      */
-    gwcContentInit: function () {
+    gwcContentInit: function (address_id) {
         var $content = $('.shop_content ul');
         $content.empty();
         $.ajax({
-            url: GWCINFOURL,
-            type: "GET",
+            url: FEEURL,
+            type: "post",
             async: true,
             data: {
-                openid: openid
+                openid: openid,
+                address_id: address_id
             },
             dataType: 'jsonp',
             success: function (data) {
@@ -128,8 +131,8 @@ var addressEv = {
                         stitching += '</li>';
                         $content.append(stitching);
                     });
-                    var amount = parseFloat(data.data.status.amount) + parseFloat($('#psf').html());
-                    $('.order_money span').html('￥' + amount);
+                    $('#psf').html(data.data.fee);//配送费
+                    $('.order_money span').html('￥' + data.data.status.total);//总价
                 }
             },
             error: function (data) {
@@ -150,11 +153,11 @@ var addressEv = {
             $('.address_tel').html(addressInfo.tel);
             $('.address_room').html(addressInfo.room);
             $('.order_address').attr('data-id', addressInfo.id);
-
+            addressEv.gwcContentInit(addressInfo.id);
         } else {
             /* 获取默认地址数据 */
             $.ajax({
-                url: ADDRESSLISTURL,
+                url: RANGEADDRESSURL,
                 type: "GET",
                 async: true,
                 data: {
@@ -164,19 +167,11 @@ var addressEv = {
                 success: function (data) {
                     console.log(data);
                     if (data.code == '000') {
-                        $.each(data.data, function (i, v) {
-                            if (v.is_default == '1') {
-                                $('.order_address').attr('data-id', v.address_id);
-                                $('.address_name').html(v.name);
-                                $('.address_tel').html(v.phone);
-                                $('.address_room').html( v.address + '' + v.room);
-                            } else {
-                                $('.order_address').attr('data-id', data.data[0].address_id);
-                                $('.address_name').html(data.data[0].name);
-                                $('.address_tel').html(data.data[0].phone);
-                                $('.address_room').html( data.data[0].address + '' + data.data[0].room);
-                            }
-                        })
+                        $('.order_address').attr('data-id', data.data[0].address_id);
+                        $('.address_name').html(data.data[0].name);
+                        $('.address_tel').html(data.data[0].phone);
+                        $('.address_room').html(data.data[0].address + '' + data.data[0].room);
+                        addressEv.gwcContentInit(data.data[0].address_id);
                     } else {
                         $('.address').html('请选择一个收货地址');
                         $('.address').css('margin-top', '4%');

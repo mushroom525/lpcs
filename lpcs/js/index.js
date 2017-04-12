@@ -16,7 +16,8 @@ var DELCARTURL = BASEURL + 'cart/del'; // 删除购物车
 var EMPTYCARTURL = BASEURL + 'cart/emptycart'; // 清空购物车
 
 var path = 'http://www.heeyhome.com/lpcs/view/';///untitled
-var openid = '';//o-X7mw822W0t7e9u7gqwkrxsb3-I
+var openid = 'o-X7mw822W0t7e9u7gqwkrxsb3-I';//o-X7mw822W0t7e9u7gqwkrxsb3-I
+sessionStorage.setItem('openid', openid);
 
 var freshIndex = {
     init: function () {
@@ -121,20 +122,20 @@ var freshIndex = {
             if ($li.length != '0') {
                 if ($('#gec_detail').is(':hidden')) {
                     $('#gec_detail').show();
-                    $('#wrap').show();
-                    // $('.detail_wrap').css('position', 'fixed');
-                    var u = navigator.userAgent;
-                    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
-                    if (isAndroid) {
-                        show_popwindow();
-                    }
-                    function show_popwindow() {
-                        //页面加载时，弹出框是隐藏的，当点击弹出按钮时，弹出框弹出
-                        document.getElementById("wrap").style.display = "block";
-                        //下面的两句是为了防止底部页面滑动。注：必须对html和body都设置overflow:hidden，移动端才能禁止滑动
-                        document.documentElement.style.overflow = 'hidden';
-                        document.body.style.overflow = 'hidden';
-                    }
+                    $('#wrap').removeClass('display');
+                    $('.right_content').css('position', 'fixed');
+                    // var u = navigator.userAgent;
+                    // var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                    // if (isAndroid) {
+                    //     show_popwindow();
+                    // }
+                    // function show_popwindow() {
+                    //     //页面加载时，弹出框是隐藏的，当点击弹出按钮时，弹出框弹出
+                    //     document.getElementById("wrap").style.display = "block";
+                    //     //下面的两句是为了防止底部页面滑动。注：必须对html和body都设置overflow:hidden，移动端才能禁止滑动
+                    //     document.documentElement.style.overflow = 'hidden';
+                    //     document.body.style.overflow = 'hidden';
+                    // }
 
                     // document.getElementById('abc').addEventListener("touchstart", function (e) {
                     //     window.event.returnValue = false;
@@ -147,15 +148,16 @@ var freshIndex = {
                     //
                     //     }
                     // }, {passive: false});
-                    document.getElementById("wrap").ontouchstart = function (e) {
-                        e.preventDefault();
-                    };
-                    var body_width = parseInt($(window).width());
-                    var body_height = parseInt($(window).height());
-                    $('#wrap').css({'width': body_width, 'height': body_height});
+                    // document.getElementById("wrap").ontouchstart = function (e) {
+                    //     e.preventDefault();
+                    // };
+                    // var body_width = parseInt($(window).width());
+                    // var body_height = parseInt($(window).height());
+                    // $('#wrap').css({'width': body_width, 'height': body_height});
                 } else {
                     $('#gec_detail').hide();
-                    $('#wrap').hide();
+                    $('#wrap').addClass('display');
+                    $('.right_content').css('position', 'inherit');
                 }
             }
         });
@@ -165,8 +167,9 @@ var freshIndex = {
      */
     closeWrapEvent: function () {
         document.getElementById("wrap").ontouchstart = function (e) {
-            $('#wrap').hide();
             $('#gec_detail').hide();
+            $('#wrap').addClass('display');
+            $('.right_content').css('position', 'inherit');
         };
     },
     /**
@@ -632,46 +635,47 @@ var freshIndex = {
 };
 
 $(function () {
-    // freshIndex.init();
-    function getUrlParam(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-        if (r != null) return unescape(r[2]);
-        return null; //返回参数值
-    }
 
-    var code = getUrlParam('code');
-
-
-
-    if (sessionStorage.getItem('openid') == null) {
-        $.ajax({
-            url: OPENIDURL,
-            type: "GET",
-            async: true,
-            data: {
-                code: code
-            },
-            dataType: 'jsonp',
-            success: function (data) {
-                if (data.code == '000') {
-                    openid = data.data.openid;
-                    sessionStorage.setItem('openid', data.data.openid);
-                    // sessionStorage.setItem('openid', 'weww1');
-                    freshIndex.init();
-                } else {
-                    layer.msg(data.msg);
-                }
-            },
-            error: function (data) {
-            }
-        });
-    } else {
-
-        openid = sessionStorage.getItem('openid');
-        if (openid != null) {
-            freshIndex.init();
-        }
-
-    }
+    freshIndex.init();
+    // function getUrlParam(name) {
+    //     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    //     var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    //     if (r != null) return unescape(r[2]);
+    //     return null; //返回参数值
+    // }
+    //
+    // var code = getUrlParam('code');
+    //
+    //
+    //
+    // if (sessionStorage.getItem('openid') == null) {
+    //     $.ajax({
+    //         url: OPENIDURL,
+    //         type: "GET",
+    //         async: true,
+    //         data: {
+    //             code: code
+    //         },
+    //         dataType: 'jsonp',
+    //         success: function (data) {
+    //             if (data.code == '000') {
+    //                 openid = data.data.openid;
+    //                 sessionStorage.setItem('openid', data.data.openid);
+    //                 // sessionStorage.setItem('openid', 'weww1');
+    //                 freshIndex.init();
+    //             } else {
+    //                 layer.msg(data.msg);
+    //             }
+    //         },
+    //         error: function (data) {
+    //         }
+    //     });
+    // } else {
+    //
+    //     openid = sessionStorage.getItem('openid');
+    //     if (openid != null) {
+    //         freshIndex.init();
+    //     }
+    //
+    // }
 });
