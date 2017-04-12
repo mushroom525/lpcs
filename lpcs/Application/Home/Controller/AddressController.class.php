@@ -25,14 +25,14 @@ class AddressController extends Controller
         if($alllist){
             foreach($alllist as $key=>$val){
                 $distance=$this->getDistance($val['receiver_lat'],$val['receiver_lng'],$seller_lat,$seller_lng);
-                if($distance>$maxdistance){
+                if($distance<=$maxdistance){
                     $addresslist=$alllist[$key];
                 }
             }
             if($addresslist){
                 $arr = array(
                     "code" => "000",
-                    "data" => $addresslist,
+                    "data" => array($addresslist),
                     "msg" => "成功"
                 );
                 echo $callback . "(" . HHJson($arr) . ")";

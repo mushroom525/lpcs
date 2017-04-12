@@ -48,24 +48,23 @@ class SellerController extends Controller
     public function orderlist(){
         $callback=$_REQUEST['callback'];
         $order=D('order');
-        $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id")->order('id desc')->select();
+        $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id and o.seller_del=0 and (order_step=1 or order_step=2 or order_step=3 or order_step=5) ")->order('id desc')->select();
         if($orderlist){
             foreach($orderlist as $key=>$val){
                 switch ($val['order_step']){
-                    case 0: $order_step_ch='待支付';break;
                     case 1: $order_step_ch='待商户接单';break;
                     case 2: $order_step_ch='待配送';break;
                     case 3: $order_step_ch='已完成';break;
-                    case 4: $order_step_ch='已取消';break;
+                    case 5: $order_step_ch='配送中';break;
                 }
                 $orderlist[$key]['order_step_ch']=$order_step_ch;
-                $arr = array(
-                    "code" => "000",
-                    "msg" => "查询成功",
-                    "data" => $orderlist
-                );
-                echo $callback . "(" . HHJson($arr) . ")";
             }
+            $arr = array(
+                "code" => "000",
+                "msg" => "查询成功",
+                "data" => $orderlist
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
         } else{
             $arr = array(
                 "code" => "111",

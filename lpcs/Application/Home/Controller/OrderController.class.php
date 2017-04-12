@@ -91,7 +91,7 @@ class OrderController extends Controller
         $user_openid=$_REQUEST['openid'];
         $order=D('order');
         $suggest=D('suggestion');
-        $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id and o.user_openid='%s'",$user_openid)->order('id desc')->select();
+        $orderlist= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,o.order_step,o.order_id,o.order_time,o.goods_num,o.total_amount')->where("a.address_id=o.address_id and o.user_openid='%s' and o.is_del=0",$user_openid)->order('id desc')->select();
         if($orderlist){
             foreach($orderlist as $key=>$val){
                 switch ($val['order_step']){
@@ -100,6 +100,7 @@ class OrderController extends Controller
                     case 2: $order_step_ch='待配送';break;
                     case 3: $order_step_ch='已完成';break;
                     case 4: $order_step_ch='已取消';break;
+                    case 5: $order_step_ch='配送中';break;
                 }
                 $orderlist[$key]['order_step_ch']=$order_step_ch;
                 $map['user_openid']=$user_openid;
@@ -172,40 +173,7 @@ class OrderController extends Controller
         $order=D('order');
         $refund=D('refund');
         $order_step=$order->where("order_id='%s'",$order_id)->getField('order_step');
-        if($order_step==1 || $order_step==0){
-            if($order_step==1){
-                $orderinfo=$order->where("order_id='%s'",$order_id)->find();
-                $map['wx_orderid']=$orderinfo['wx_orderid'];
-                $map['order_id']=$order_id;
-                $map['order_amount']=$orderinfo['total_amount'];
-                $refundadd=$refund->add($map);
-                if($refundadd){
-                    $orderedit=$order-> where("order_id='%s'",$order_id)->setField('order_step','4');
-                    if($orderedit){
-                        $arr = array(
-                            "code" => "000",
-                            "msg" => "取消成功",
-                            "data" => ""
-                        );
-                        echo $callback . "(" . HHJson($arr) . ")";
-                    }else{
-                        $arr = array(
-                            "code" => "111",
-                            "msg" => "取消失败",
-                            "data" => ""
-                        );
-                        echo $callback . "(" . HHJson($arr) . ")";
-                    }
-                }else{
-                    $arr = array(
-                        "code" => "111",
-                        "msg" => "取消失败",
-                        "data" => ""
-                    );
-                    echo $callback . "(" . HHJson($arr) . ")";
-                }
-            }
-            if($order_step==0){
+        if($order_step==0){
                 $orderedit=$order-> where("order_id='%s'",$order_id)->setField('order_step','4');
                 if($orderedit){
                     $arr = array(
@@ -222,7 +190,6 @@ class OrderController extends Controller
                     );
                     echo $callback . "(" . HHJson($arr) . ")";
                 }
-            }
         }else{
             $arr = array(
                 "code" => "112",
@@ -351,20 +318,38 @@ class OrderController extends Controller
     public function order_del(){
         $callback=$_GET['callback'];
         $order_id=$_GET['order_id'];
+        $user_type=$_GET['type'];
         $order=D('order');
-        $deldefault=$order-> where('order_id='.$order_id)->setField('is_del','1');
-        if($deldefault){
-            $arr = array("code" => "000",
-                "data" => "",
-                "msg" => "成功"
-            );
-            echo $callback . "(" . HHJson($arr) . ")";
+        if($user_type==2){
+            $deldefault=$order-> where('order_id='.$order_id)->setField('seller_del','1');
+            if($deldefault){
+                $arr = array("code" => "000",
+                    "data" => "",
+                    "msg" => "成功"
+                );
+                echo $callback . "(" . HHJson($arr) . ")";
+            }else{
+                $arr = array("code" => "111",
+                    "data" =>"",
+                    "msg" => "失败"
+                );
+                echo $callback . "(" . HHJson($arr) . ")";
+            }
         }else{
-            $arr = array("code" => "111",
-                "data" =>"",
-                "msg" => "失败"
-            );
-            echo $callback . "(" . HHJson($arr) . ")";
+            $deldefault=$order-> where('order_id='.$order_id)->setField('is_del','1');
+            if($deldefault){
+                $arr = array("code" => "000",
+                    "data" => "",
+                    "msg" => "成功"
+                );
+                echo $callback . "(" . HHJson($arr) . ")";
+            }else{
+                $arr = array("code" => "111",
+                    "data" =>"",
+                    "msg" => "失败"
+                );
+                echo $callback . "(" . HHJson($arr) . ")";
+            }
         }
     }
 }

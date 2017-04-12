@@ -18,6 +18,7 @@
 ```
 data
 order_id            订单id
+如果是商家端订单列表的删除 多传个type=2
 
 callback            回调
 ```
