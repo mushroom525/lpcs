@@ -46,6 +46,8 @@ data         {
                     pay_time             支付完成时间
                     receiving_time       接单时间
                     finish_time          完成时间
+                    appointment_time     订单预约时间
+                    remark               订单备注
                     goods {
                                goods_id             商品id
                                goods_name           商品名

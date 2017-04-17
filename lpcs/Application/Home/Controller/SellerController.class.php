@@ -74,4 +74,25 @@ class SellerController extends Controller
             echo $callback . "(" . HHJson($arr) . ")";
         }
     }
+    public function isSeller(){
+        $callback = $_REQUEST['callback'];
+        $openid = $_REQUEST['openid'];
+        $order = D('admin');
+        $adminExistence = $order -> where("open_id='%s'",$openid)->getField('id');
+        if($adminExistence){
+            $arr = array(
+                "code" => "000",
+                "msg" => "true",
+                "data" => ""
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }else{
+            $arr = array(
+                "code" => "200",
+                "msg" => "false",
+                "data" => ""
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
+    }
 }

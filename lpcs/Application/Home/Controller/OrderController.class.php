@@ -135,7 +135,7 @@ class OrderController extends Controller
         $order=D('order');
         $ordereach=D('order_each');
         $good=D('goods');
-        $orderinfo= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,a.address_id,a.area,a.address,a.room,o.order_step,o.order_id,o.order_time,o.goods_num,o.goods_amount,o.total_amount,o.distribution_cost,o.remark,o.pay_time,o.receiving_time,o.finish_time')->where("a.address_id=o.address_id and o.order_id='%s'",$order_id)->find();
+        $orderinfo= D()->table(array('lp_order' => 'o', 'lp_address' => 'a'))->field('a.name,a.phone,a.address_id,a.area,a.address,a.room,o.order_step,o.order_id,o.order_time,o.goods_num,o.goods_amount,o.total_amount,o.distribution_cost,o.remark,o.pay_time,o.receiving_time,o.finish_time,o.appointment_time')->where("a.address_id=o.address_id and o.order_id='%s'",$order_id)->find();
         if($orderinfo){
                 switch ($orderinfo['order_step']){
                     case 0: $order_step_ch='待支付';break;
