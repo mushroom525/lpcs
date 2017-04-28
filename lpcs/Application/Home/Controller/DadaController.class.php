@@ -266,4 +266,54 @@ class DadaController extends Controller
             echo 'except';
         }
     }
+
+    /*
+     * TODO
+     * 达达未接入，临时去配送接口
+    */
+    public function dadaTemporary()
+    {
+        $callback = $_REQUEST['callback'];
+        $order_id = $_REQUEST['order_id'];
+        $order = D('order');
+        $deldefault = $order->where('order_id=' . $order_id)->setField('order_step', '5');
+        if ($deldefault) {
+            $arr = array("code" => "000",
+                "data" => "",
+                "msg" => "成功"
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        } else {
+            $arr = array("code" => "111",
+                "data" => "",
+                "msg" => "失败"
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
+    }
+
+    /*
+     * TODO
+     * 达达未接入，临时配送完成接口
+    */
+    public function dadaFinish()
+    {
+        $callback = $_REQUEST['callback'];
+        $order_id = $_REQUEST['order_id'];
+        $order = D('order');
+        $deldefault = $order->where('order_id=' . $order_id)->setField('order_step', '3');
+        if ($deldefault) {
+            $arr = array("code" => "000",
+                "data" => "",
+                "msg" => "成功"
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        } else {
+            $arr = array("code" => "111",
+                "data" => "",
+                "msg" => "失败"
+            );
+            echo $callback . "(" . HHJson($arr) . ")";
+        }
+    }
 }
